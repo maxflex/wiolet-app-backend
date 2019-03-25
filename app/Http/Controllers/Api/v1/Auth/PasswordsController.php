@@ -44,8 +44,7 @@ class PasswordsController extends Controller
         $email = Redis::get(cacheKey(self::CACHE_KEY, $request->token));
 
         $user = User::where('email', $email)->first();
-        $password = $request->input('password');
-        $user->password = $password;
+        $user->password = $request->password;
         $user->save();
 
         // сразу возвращаем JWT token
