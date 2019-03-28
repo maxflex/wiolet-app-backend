@@ -16,6 +16,10 @@ return [
     'is_phone' => 'Некорректный номер телефона',
     'wrong-verify-code' => 'Неверный код подтверждения',
 
+    'events' => [
+        'wrong-type' => 'неизвестный тип события',
+    ],
+
     'accepted'             => 'Вы должны принять :attribute.',
     'active_url'           => 'Поле :attribute содержит недействительный URL.',
     'after'                => 'В поле :attribute должна быть дата после :date.',

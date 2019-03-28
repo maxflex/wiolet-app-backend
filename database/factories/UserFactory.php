@@ -1,8 +1,9 @@
 <?php
 
-use App\User;
+use App\Models\{User, UserPreference};
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
+use App\Models\Geo\City;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,11 +17,21 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    $gender = $faker->randomElement(['male', 'female']);
     return [
-        'name' => $faker->name,
+        'name' => $faker->name($gender),
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'password' => bcrypt(Str::random(10)),
+        'gender' => $gender,
+        'birthdate' => $faker->dateTimeBetween('-30 years', 'now'),
+        'about' => $faker->realText(),
+        'phone' => '79001112233',
+        'height' => $faker->numberBetween(160, 205),
+        'weight' => $faker->numberBetween(45, 110),
+        'city_id' => City::inRandomOrder()->value('id')
     ];
+});
+
+$factory->afterCreating(User::class, function($user, $faker) {
+    $user->preferences()->update(factory(UserPreference::class)->make()->toArray());
 });

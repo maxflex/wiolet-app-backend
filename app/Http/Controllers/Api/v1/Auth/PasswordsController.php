@@ -49,6 +49,6 @@ class PasswordsController extends Controller
 
         // сразу возвращаем JWT token
         $request->merge(compact('email'));
-        return app()->call(LoginController::class . '@login');
+        return app()->call(AuthController::class . '@login');
     }
 }

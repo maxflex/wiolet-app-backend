@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api\v1\Auth;
 
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\{Controller, PhotosController};
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\v1\PhotosController;
 use App\Http\Requests\Auth\{RegisterRequest};
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {

@@ -24,3 +24,9 @@ function successResponse(string $message)
 {
     return response()->json(compact('message'), 200);
 }
+
+// want-to-meet-you => wantToMeetYou
+function toCamelCase(string $string, string $separator = '-') : string
+{
+    return lcfirst(implode('', array_map(function($e) { return ucfirst($e); }, explode($separator, $string))));
+}

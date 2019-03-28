@@ -10,9 +10,11 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'name', 'email', 'gender', 'birthdate'
+            'id', 'name', 'email', 'gender', 'birthdate', 'about',
+            'height', 'weight'
         ], [
             'photos' => PhotoResource::collection($this->photos),
+            'preferences' => new UserPreferenceResource($this->preferences),
         ]);
     }
 }

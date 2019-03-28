@@ -22,10 +22,10 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
     Route::apiResource('cities', 'CitiesController');
 
     Route::prefix('auth')->namespace('Auth')->group(function() {
-        Route::post('refresh', 'LoginController@refresh');
-        Route::post('register', 'LoginController@register');
-        Route::post('login', 'LoginController@login');
-        Route::post('logout', 'LoginController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::post('register', 'AuthController@register');
+        Route::post('login', 'AuthController@login');
+        Route::post('logout', 'AuthController@logout');
         Route::prefix('sms')->group(function() {
             Route::post('send-code', 'VerifyController@sendCode');
             Route::post('verify-code', 'VerifyController@verifyCode');
@@ -42,7 +42,15 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
             'photos' => 'PhotosController',
         ]);
 
+        Route::post('events', 'EventsController@store');
+
         Route::get('profile', 'ProfileController@show');
         Route::put('profile', 'ProfileController@update');
+
+        Route::prefix('cards')->group(function() {
+           Route::get('show', 'CardsController@show');
+        });
+
+        Route::get('lists', 'ListsController@index');
     });
 });
