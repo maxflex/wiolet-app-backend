@@ -1,33 +1,61 @@
+require('./bootstrap')
+window.Vue = require('vue')
+window.Vue.http = axios
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+// иначе загрузка STORE происходит позже
+// import Index from '@/components/Index'
+import store from './store'
 
-require('./bootstrap');
+// иначе загрузка STORE происходит позже
+// import router from './router'
+import filters from '@/other/filters'
+import {GlobalPlugin} from '@/other/plugins'
+import VueTheMask from 'vue-the-mask'
+import Vuetify from 'vuetify'
+import ru from 'vuetify/es5/locale/ru'
+import vueUpload from '@/vendor/vue-upload.min'
+// import * as VueGoogleMaps from 'vue2-google-maps'
 
-window.Vue = require('vue');
+[GlobalPlugin, VueTheMask].forEach(use => Vue.use(use))
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+// Vue.use(VueGoogleMaps, {
+//   load: {
+//     key: 'AIzaSyAXXZZwXMG5yNxFHN7yR4GYJgSe9cKKl7o',
+//     libraries: 'places',
+//     language: 'ru'
+//   },
+// })
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+Vue.use(Vuetify, {
+  lang: {
+    locales: { ru },
+    current: 'ru'
+  }
+})
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.use(vueUpload, {
+  http: function(data) {
+    console.log('data', data)
+    return axios.post(data.url, data.body, {
+      onUploadProgress: data.progress,
+      cancelToken: data.cancelToken,
+    })
+    .then(data.success)
+    // .catch(data.error)
+  }
+})
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 
-const app = new Vue({
-    el: '#app'
-});
+axios.get(apiUrl('initial-data')).then(r => {
+  store.commit('setData', r.data.data)
+  store.commit('setUser', r.data.user)
+  new Vue({
+    el: '#app',
+    components: {
+      App: require('./components/App').default
+    },
+    store,
+    router: require('./router').default
+  })
+})

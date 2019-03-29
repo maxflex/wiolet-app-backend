@@ -1,5 +1,9 @@
-
 window._ = require('lodash');
+window.moment = require('moment');
+window.moment.locale('ru')
+window.Popper = require('popper.js').default;
+window.Cookies = require('js-cookie');
+// window.algolia = require('algoliasearch')(process.env.MIX_ALGOLIA_APP_ID, process.env.MIX_ALGOLIA_SECRET);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -8,7 +12,6 @@ window._ = require('lodash');
  */
 
 try {
-    window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
@@ -37,6 +40,29 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+window.apiUrl = (...paths) => process.env.MIX_CRM_API_URL + paths.join('/')
+
+window.clone = (obj) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+window.uniqid = function() {
+  var S4 = function() {
+     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  };
+  return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
+window.queryString = (obj, appendQuestionMark = true) => {
+  if (obj === null) {
+    return ''
+  }
+  return (appendQuestionMark ? '?' : '') + Object.entries(obj).map(e => e[0] + '=' + e[1]).join('&')
+}
+
+window.colorLog = (message, color = 'PaleVioletRed') => console.log('%c' + message, `color:${color}`)
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
