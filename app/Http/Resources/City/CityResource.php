@@ -10,7 +10,8 @@ class CityResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name . ', ' . $this->region->name,
+            'city' => $this->name,
+            'region' => $this->region->name,
         ];
     }
 }
