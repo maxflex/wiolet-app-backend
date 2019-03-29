@@ -17,9 +17,6 @@ class AuthController extends Controller
 
         $token = auth()->login($user);
 
-        // Загружаем фотки
-        app()->call(PhotosController::class . '@store');
-
         return $this->respondWithToken($token);
     }
 

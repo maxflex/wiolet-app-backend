@@ -17,10 +17,10 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('email')->unique();
             $table->string('password');
-            $table->string('phone');
-            $table->string('name');
-            $table->enum('gender', ['male', 'female']);
-            $table->date('birthdate');
+            $table->string('phone')->nullable();
+            $table->string('name')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->date('birthdate')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
             $table->foreign('city_id')->references('id')->on('cities')->onDelete('set null');
             $table->string('about', 1000)->nullable();
