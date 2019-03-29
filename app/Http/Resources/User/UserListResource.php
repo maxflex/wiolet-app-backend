@@ -12,7 +12,7 @@ class UserListResource extends JsonResource
         return extractFields($this, [
             'id', 'name', 'gender'
         ], [
-            'photo' => count($this->photos) > 0 ? new PhotoResource($this->photos[0]) : null,
+            'photo_url' => count($this->photos) > 0 ? $this->photos[0]->url : null,
         ]);
     }
 }

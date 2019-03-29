@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Auth;
 
+use Broadcast;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,6 +44,20 @@ class AuthController extends Controller
         auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
     }
+
+    /**
+     * Авторизация приватных каналов для сокетов
+     *
+     * пока что используется pusher
+     */
+    public function sockets(Request $request)
+    {
+        // return Broadcast::auth($request);
+        // if (auth()->check()) {
+
+        // }
+    }
+
 
     protected function respondWithToken($token)
     {

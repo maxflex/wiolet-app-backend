@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Event\{Event, EventType};
 use App\Http\Resources\Event\EventResource;
+use App\Events\IncomingEvent;
 
 class EventsController extends Controller
 {
@@ -23,8 +24,10 @@ class EventsController extends Controller
             ],
         ]);
 
-        return new EventResource(
-            auth()->user()->events()->create($request->all())
-        );
+        $item = auth()->user()->events()->create($request->all());
+
+        event(new IncomingEvent($item));
+
+        return new EventResource($item);
     }
 }

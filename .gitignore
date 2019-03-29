@@ -4,6 +4,7 @@
 /storage/*.key
 /vendor
 /laradock
+/tests/Sandbox
 .env
 .phpunit.result.cache
 Homestead.json

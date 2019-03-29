@@ -21,4 +21,11 @@ class PhotosController extends Controller
         }
         return response(null, 201);
     }
+
+    public function destroy($id)
+    {
+        $item = Photo::find($id);
+        $this->authorize('delete', $item);
+        $item->delete();
+    }
 }

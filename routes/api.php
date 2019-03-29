@@ -35,11 +35,18 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
             Route::post('get-token', 'PasswordsController@getToken');
             Route::post('reset', 'PasswordsController@reset');
         });
+
+
+        Route::options('sockets', function() {
+            return response(null, 200);
+        });
+        Route::post('sockets', 'AuthController@sockets');
     });
 
     Route::middleware('auth:api')->group(function() {
         Route::apiResources([
             'photos' => 'PhotosController',
+            'messages' => 'MessagesController',
         ]);
 
         Route::post('events', 'EventsController@store');
