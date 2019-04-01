@@ -16,6 +16,7 @@ const router = new Router({
     }
   },
   routes: [
+    ...require('./events').default,
     ...require('./users').default,
   ]
 })

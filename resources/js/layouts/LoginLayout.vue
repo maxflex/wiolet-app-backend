@@ -86,7 +86,7 @@
         }).catch(error => {
           this.error = 'в доступе отказано'
         }).then(() => {
-        this.loading = false
+            this.loading = false
         })
       },
 

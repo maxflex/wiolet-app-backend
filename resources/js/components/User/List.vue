@@ -8,8 +8,22 @@
       :items='items'
     >
       <template slot='items' slot-scope="{ item }">
+        <td width='500'>
+          {{ item.name || 'пусто' }}
+        </td>
         <td>
-          {{ item.id }}
+          <span v-if='item.gender'>
+            {{ GENDER.find(e => e.id === item.gender).title }}
+          </span>
+          <span v-else>
+            не указано
+          </span>
+        </td>
+        <td class='grey--text'>
+          {{ item.created_at | date-time }}
+        </td>
+        <td>
+          <EmailShow :item='item.email' />
         </td>
         <td class='text-md-right'>
           <v-btn @click='$refs.Dialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
@@ -23,6 +37,8 @@
 
 <script>
 import Dialog from './Dialog'
+import { GENDER } from './'
+import EmailShow from '@/components/Email/Show'
 
 export default {
   props: {
@@ -32,12 +48,13 @@ export default {
     },
   },
 
-  components: { Dialog },
+  components: { Dialog, EmailShow },
 
   data() {
     return {
+      GENDER
     }
   },
-  
+
 }
 </script>

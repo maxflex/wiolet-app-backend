@@ -1,6 +1,10 @@
 <template>
   <div>
-    <DisplayData />
+    <DisplayData :api-url='API_URL' :paginate='50' :filters='FILTERS'>
+        <template slot='items' slot-scope='{ items }'>
+            <UserList :items='items' />
+        </template>
+    </DisplayData>
   </div>
 </template>
 
@@ -8,10 +12,10 @@
 
 import DisplayData from '@/components/UI/DisplayData'
 import { API_URL, FILTERS } from '@/components/User'
-// import UserList from '@/components/User/List'
+import UserList from '@/components/User/List'
 
 export default {
-  components: { DisplayData },
+  components: { DisplayData, UserList },
 
   data() {
     return {

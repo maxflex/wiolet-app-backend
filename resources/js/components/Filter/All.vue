@@ -65,14 +65,22 @@
 <script>
 import { LOCAL_STORAGE_KEY } from './'
 
-import { 
-  TypeSelect,
-  TypeAdmin,
-  TypeMultiple,
-  TypeInterval,
-  TypeInput,
-  TypeSort,
-} from './Type'
+// import { 
+//   TypeSelect,
+//   TypeAdmin,
+//   TypeMultiple,
+//   TypeInterval,
+//   TypeInput,
+//   TypeSort,
+// } from './Type'
+
+import TypeMultiple from './Type/Multiple'
+import TypeSort from './Type/Sort'
+import TypeInput from './Type/Input'
+import TypeSelect from './Type/Select'
+import TypeAdmin from './Type/Admin'
+import TypeInterval from './Type/Interval'
+
 
 const components = { 
   TypeSort,

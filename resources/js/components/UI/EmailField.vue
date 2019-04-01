@@ -1,11 +1,11 @@
 <template>
   <div>
-    <v-text-field v-model="entity.email.email" label="Email" hide-details></v-text-field>
+    <v-text-field v-model="email" label="Email" hide-details></v-text-field>
     <v-layout row justify-center>
       <v-dialog v-model="dialog" max-width="1000px" scrollable>
         <v-card>
           <v-card-title class='title justify-center'>
-            {{ entity.email.email }}
+            {{ email }}
           </v-card-title>
           <v-card-text class='messages'>
             <Loader v-if='messages === null' />
@@ -45,7 +45,7 @@
 const API_URL = 'email-messages'
 
 export default {
-  props: ['entity'],
+  props: ['email'],
 
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
       this.subject = ''
       this.dialog = true
       // Vue.nextTick(() => this.$refs.textarea.focus())
-      axios.get(apiUrl(`${API_URL}?email=${this.entity.email.email}`)).then(r => {
+      axios.get(apiUrl(`${API_URL}?email=${this.email}`)).then(r => {
         this.messages = r.data
       })
     },
@@ -74,7 +74,7 @@ export default {
       axios.post(apiUrl(API_URL), {
         subject: this.subject,
         message: this.message,
-        email: this.entity.email.email,
+        email: this.email,
       }).then(r => {
         console.log(r.data)
         this.sending = false

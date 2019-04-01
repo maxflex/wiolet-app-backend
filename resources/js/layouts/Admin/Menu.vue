@@ -44,7 +44,12 @@ export default {
         icon: 'person',
         route: 'UserIndex',
         label: 'Пользователи',
-        counter: 'requests',
+        counter: 'users',
+      },
+      {
+        icon: 'compare_arrows',
+        route: 'EventIndex',
+        label: 'События',
       },
     //   {
     //     icon: 'person',

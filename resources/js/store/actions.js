@@ -1,6 +1,6 @@
 export default {
   logout({ commit }) {
-    axios.get(apiUrl('logout'))
+    axios.post(apiUrlBackend('auth/logout'))
     commit('setUser', null)
   }
   // Load initial data

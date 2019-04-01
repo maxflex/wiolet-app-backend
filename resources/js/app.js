@@ -47,9 +47,12 @@ Vue.use(vueUpload, {
 
 Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 
-axios.get(apiUrl('initial-data')).then(r => {
-  store.commit('setData', r.data.data)
+axios.get(apiUrl('initial-data'))
+.then(r => {
   store.commit('setUser', r.data.user)
+})
+.catch(e => {})
+.then(() => {
   new Vue({
     el: '#app',
     components: {
