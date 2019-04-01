@@ -15,12 +15,18 @@ class VerifyController extends Controller
      */
     public function sendCode(SendCodeRequest $request)
     {
+        // Код уже был отправлен и ещё не истек
+        if (Redis::get(cacheKey('codes', $request->phone)) !== null) {
+            return errorResponse([
+                'ttl' => Redis::ttl(cacheKey('codes', $request->phone))
+            ]);
+        }
         $phone = Phone::clean($request->phone);
         $code = mt_rand(10000, 99999);
         Redis::set(cacheKey('codes', $phone), $code, 'EX', 120);
         Sms::send($phone, __('auth.sms-code', compact('code')), false);
         // return response()->json(compact('code'));
-        return response()->json([], 201);
+        return emptyResponse();
     }
 
     /**
@@ -29,6 +35,6 @@ class VerifyController extends Controller
     public function verifyCode(VerifyCodeRequest $request)
     {
         Redis::del(cacheKey('codes', $request->phone));
-        return response()->json([], 202);
+        return emptyResponse();
     }
 }

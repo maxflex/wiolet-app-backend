@@ -7,12 +7,10 @@ use Redis;
 
 class SendCodeRequest extends FormRequest
 {
-    /**
-     * Действие авторизовано только в случае, если кода в кэше нет
-     */
+
     public function authorize()
     {
-        return Redis::get(cacheKey('codes', $this->phone)) === null;
+        return true;
     }
 
     /**

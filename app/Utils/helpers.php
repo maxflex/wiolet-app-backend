@@ -15,14 +15,14 @@ function extractFields($object, $fields, $merge = [])
     return array_merge($return, $merge);
 }
 
-function errorResponse($errors, int $code = 406)
+function errorResponse($errors, int $code = 403)
 {
     return response()->json([
         'errors' => $errors
     ], $code);
 }
 
-function errorMessageResponse(string $message, int $code = 406)
+function errorMessageResponse(string $message, int $code = 403)
 {
     return response()->json([
         'errors' => [

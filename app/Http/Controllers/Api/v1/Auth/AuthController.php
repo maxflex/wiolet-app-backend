@@ -22,8 +22,7 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        $this->respondWithToken(auth()->refresh());
-        return emptyReponse();
+        return $this->respondWithToken(auth()->refresh());
     }
 
     public function login()
