@@ -31,7 +31,7 @@ function errorMessageResponse(string $message, int $code = 403)
     ], $code);
 }
 
-function emptyReponse()
+function emptyResponse()
 {
     return response(null, 204);
 }

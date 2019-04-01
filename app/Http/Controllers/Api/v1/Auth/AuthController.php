@@ -39,7 +39,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return emptyReponse();
+        return emptyResponse();
     }
 
     /**
