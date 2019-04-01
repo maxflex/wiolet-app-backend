@@ -1,0 +1,34 @@
+$vertical-input-width: 300px;
+$vertical-input-margin: 20px;
+
+.vertical-input {
+  width: $vertical-input-width; 
+  margin-bottom: $vertical-input-margin;
+}
+
+.vertical-inputs {
+  width: 100%;
+  & > div {
+    margin-bottom: $vertical-input-margin;
+  }
+  &__input {
+    display: flex;
+    align-items: center;
+    & .v-input {
+      width: $vertical-input-width;
+      flex: initial;
+    }
+    &__message {
+      flex: 1;
+      color: #6f6f6f;
+      margin-left: 18px;
+      top: 14px;
+      position: relative;
+    }
+    &_wide {
+      & .v-input {
+        width: #{$vertical-input-width * 2};
+      }
+    }
+  }
+}

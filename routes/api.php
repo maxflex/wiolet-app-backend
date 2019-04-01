@@ -17,6 +17,14 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
+Route::namespace('Api\crm')->prefix('crm')->middleware('auth:api')->group(function() {
+    Route::get('initial-data', 'InitialDataController@index');
+
+    Route::apiResources([
+        'users' => 'UsersController',
+        'events' => 'EventsController',
+    ]);
+});
 
 Route::namespace('Api\v1')->prefix('v1')->group(function () {
     Route::apiResource('cities', 'CitiesController');

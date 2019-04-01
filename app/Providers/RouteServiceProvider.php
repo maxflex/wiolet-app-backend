@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        // $this->mapCrmRoutes();
     }
 
     /**
@@ -70,4 +70,12 @@ class RouteServiceProvider extends ServiceProvider
              ->namespace($this->namespace)
              ->group(base_path('routes/api.php'));
     }
+
+    // protected function mapCrmRoutes()
+    // {
+    //     Route::prefix('api/crm')
+    //          ->middleware('api,auth:api')
+    //          ->namespace('App\Http\Controllers\Api\crm')
+    //          ->group(base_path('routes/crm.php'));
+    // }
 }
