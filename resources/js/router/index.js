@@ -16,7 +16,7 @@ const router = new Router({
     }
   },
   routes: [
-
+    ...require('./users').default,
   ]
 })
 

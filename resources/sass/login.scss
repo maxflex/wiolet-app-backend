@@ -7,9 +7,11 @@ html, body {
 }
 
 body {
-    background-color: $blue;
-  background-repeat: no-repeat;
-  background-size: cover;
+//     background: #8a2387; /* fallback for old browsers */
+//   background: -webkit-linear-gradient(to bottom, #8a2387, #e94057, #f27121); /* Chrome 10-25, Safari 5.1-6 */
+//   background: linear-gradient(to bottom, #8a2387, #e94057, #f27121); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+//   background-repeat: no-repeat;
+//   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,7 +186,8 @@ input[type="password"] {
 
 .btn button {
     color: white;
-    background-color: $blue;
+    background: $pink;
+    border: none;
     width: 100%;
     border-radius: 6px;
     transition: all linear .2s;
@@ -203,7 +206,7 @@ input[type="password"] {
 }
 
 .btn button:hover {
-    background: darken($blue, 15);
+    background: darken($pink, 15);
 }
 
 .login-logo img {

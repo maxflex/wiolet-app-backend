@@ -8,14 +8,14 @@
       app
       dark
     >
-      <div class='menu-logo'>
+      <!-- <div class='menu-logo'>
         <img src='/img/svg/logo-full.svg' />
-      </div>
+      </div> -->
       <Menu />
     </v-navigation-drawer>
 
     <ShowDrawer v-if='!$store.state.drawer' />
-      
+
   </div>
 </template>
 

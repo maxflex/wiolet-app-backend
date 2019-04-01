@@ -12,4 +12,6 @@ Route::namespace('Api\crm')->prefix('api/crm')->group(function() {
 });
 
 
-Route::get('/{any}', 'CrmController@index')->where('any', '.*');
+Route::get('/{any}', function() {
+    return view('crm');
+})->where('any', '.*');

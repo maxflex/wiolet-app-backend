@@ -1,9 +1,9 @@
 <template>
   <div>
     <center autocomplete="off" class="login-form animated fadeIn">
-        <div class="login-logo group">
+        <!-- <div class="login-logo group">
             <img src="/img/svg/logo.svg" />
-        </div>
+        </div> -->
         <div class="input-groups">
             <div class="group">
                 <input :disabled="sms_verification" type="text" placeholder="логин" autofocus
@@ -31,15 +31,11 @@
 </template>
 
 <script>
-  import gRecaptcha from '@finpo/vue2-recaptcha-invisible';
   import Cookies from 'js-cookie';
 
-  const TMP_CREDENTIALS_KEY = 'tmp-credentials'
-  const API_URL = 'login'
+  const API_URL = 'auth/login'
 
   export default {
-    components: { gRecaptcha },
-
     data() {
       return {
         credentials: {},
@@ -51,17 +47,14 @@
 
     created() {
       // TODO: какого хрена при уходе с элемента его стили сохраняются в HEAD?
-      $('body').css({'background-color': '#337ab7'})
-      this.MIX_RECAPTCHA_SITE = process.env.MIX_RECAPTCHA_SITE
-      const tmp_credentials = Cookies.getJSON(TMP_CREDENTIALS_KEY)
-      if (tmp_credentials) {
-        this.credentials = tmp_credentials
-        this.sms_verification = true
-      }
+      $('body').css({
+          height: '100vh',
+          background: 'linear-gradient(to bottom, #5b3c7f, #e94c8f)'
+        })
     },
 
     destroyed() {
-      $('body').css({'background-color': ''})
+      $('body').css({background: '', height: 'auto'})
     },
 
     methods: {
@@ -79,26 +72,21 @@
 
       callback(token) {
         this.loading = true
-        axios.post(apiUrl(API_URL), {
-          credentials: this.credentials,
-          token
+        this.error = false
+        axios.post(apiUrlBackend(API_URL), {
+            email: this.credentials.login,
+            password: this.credentials.password,
         }).then(response => {
-          switch(response.status) {
-            // подтверждение по смс
-            case 202:
-              this.sms_verification = true
-              var {login, password} = this.credentials
-              Cookies.set(TMP_CREDENTIALS_KEY, {login, password} , { expires: 1 / (24 * 60) * 2, path: '/' })
-              break
-            default:
-              Cookies.remove(TMP_CREDENTIALS_KEY)
-              this.$store.commit('setUser', response.data)
-              // location.reload()
-          }
+            // Сохраняем токен
+            Cookies.set('access-token', response.data.access_token)
+            window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.access_token
+            axios.get(apiUrlBackend('profile')).then(r => {
+                this.$store.commit('setUser', r.data)
+            })
         }).catch(error => {
-          this.error = error.response.data
+          this.error = 'в доступе отказано'
         }).then(() => {
-          this.loading = false
+        this.loading = false
         })
       },
 

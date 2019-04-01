@@ -27,6 +27,10 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+if (Cookies.get('access-token')) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + Cookies.get('access-token');
+}
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -42,6 +46,7 @@ if (token) {
 }
 
 window.apiUrl = (...paths) => process.env.MIX_CRM_API_URL + paths.join('/')
+window.apiUrlBackend = (...paths) => process.env.MIX_API_URL + paths.join('/')
 
 window.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
