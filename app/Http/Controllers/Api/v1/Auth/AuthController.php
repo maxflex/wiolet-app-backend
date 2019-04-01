@@ -22,7 +22,8 @@ class AuthController extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        $this->respondWithToken(auth()->refresh());
+        return emptyReponse();
     }
 
     public function login()
@@ -30,7 +31,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response(['errors' => ['credentials' => [__('auth.wrong-credentials')]]], 401);
+            return errorMessageResponse(__('auth.wrong-credentials'), 401);
         }
 
         return $this->respondWithToken($token);
@@ -39,7 +40,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response(null);
+        return emptyReponse();
     }
 
     /**

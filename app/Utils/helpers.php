@@ -15,15 +15,32 @@ function extractFields($object, $fields, $merge = [])
     return array_merge($return, $merge);
 }
 
-function errorResponse(string $message, int $code = 406)
+function errorResponse($errors, int $code = 406)
 {
-    return response()->json(compact('message'), $code);
+    return response()->json([
+        'errors' => $errors
+    ], $code);
+}
+
+function errorMessageResponse(string $message, int $code = 406)
+{
+    return response()->json([
+        'errors' => [
+            'messages' => [$message],
+        ]
+    ], $code);
+}
+
+function emptyReponse()
+{
+    return response(null, 204);
 }
 
 function successResponse(string $message)
 {
     return response()->json(compact('message'), 200);
 }
+
 
 // want-to-meet-you => wantToMeetYou
 function toCamelCase(string $string, string $separator = '-') : string

@@ -5,6 +5,7 @@
 /vendor
 /laradock
 /tests/Sandbox
+/public/mix-manifest.json
 .env
 .phpunit.result.cache
 Homestead.json

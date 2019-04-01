@@ -20,7 +20,7 @@ class VerifyController extends Controller
         Redis::set(cacheKey('codes', $phone), $code, 'EX', 120);
         Sms::send($phone, __('auth.sms-code', compact('code')), false);
         // return response()->json(compact('code'));
-        return response(null, 201);
+        return response()->json([], 201);
     }
 
     /**
@@ -28,7 +28,7 @@ class VerifyController extends Controller
      */
     public function verifyCode(VerifyCodeRequest $request)
     {
-        Redis::delete(cacheKey('codes', $request->phone));
-        return response(null, 200);
+        Redis::del(cacheKey('codes', $request->phone));
+        return response()->json([], 202);
     }
 }
