@@ -10,7 +10,7 @@ class UserListResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'name', 'gender', 'created_at', 'email'
+            'id', 'name', 'gender', 'created_at', 'email', 'city'
         ]);
     }
 }

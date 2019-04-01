@@ -27,4 +27,13 @@ class UsersController extends Controller
         $item = User::find($id);
         return new UserResource($item);
     }
+
+    public function update($id, Request $request)
+    {
+        $item = User::find($id);
+        $item->update($request->all());
+        $item->preferences()->update($request->preferences);
+        $item->save();
+        return new UserResource($item);
+    }
 }

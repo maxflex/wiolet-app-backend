@@ -8,8 +8,13 @@
       :items='items'
     >
       <template slot='items' slot-scope="{ item }">
-        <td width='500'>
+        <td width='400'>
           {{ item.name || 'пусто' }}
+        </td>
+        <td>
+          <span v-if='item.city'>
+            {{ item.city.name }}
+          </span>
         </td>
         <td>
           <span v-if='item.gender'>

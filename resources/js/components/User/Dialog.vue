@@ -27,16 +27,19 @@
                     <v-text-field label='Email' v-model='item.email' hide-details />
                   </div>
                   <div class='vertical-inputs__input'>
+                    <v-text-field hide-details v-model='item.phone' label="Телефон" />
+                  </div>
+                  <div class='vertical-inputs__input'>
                     <DatePicker v-model='item.birthdate' label="Дата рождения" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect :items='GENDER' label='Пол' v-model='item.gender' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.height' label="Рост" />
+                    <v-text-field hide-details v-model='item.height' label="Рост, см." />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.weight' label="Вес" />
+                    <v-text-field hide-details v-model='item.weight' label="Вес, кг." />
                   </div>
                   <div class='headline mb-4 mt-5'>Предпочтения</div>
                   <div class='vertical-inputs__input'>
