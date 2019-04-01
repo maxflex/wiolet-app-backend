@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response(null, 401);
+            return response(['errors' => ['credentials' => __('auth.wrong-credentials')]], 401);
         }
 
         return $this->respondWithToken($token);
@@ -39,7 +39,7 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return response()->json(['message' => 'Successfully logged out']);
+        return response(null);
     }
 
     /**
@@ -49,10 +49,7 @@ class AuthController extends Controller
      */
     public function sockets(Request $request)
     {
-        // return Broadcast::auth($request);
-        // if (auth()->check()) {
-
-        // }
+        return Broadcast::auth($request);
     }
 
 
