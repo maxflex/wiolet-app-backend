@@ -10,6 +10,10 @@ class PhotosController extends Controller
 {
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'photos' => 'required',
+            'photos.*' => 'image'
+        ]);
         foreach($request->file('photos') as $file) {
             $extension = $file->getClientOriginalExtension();
             $original_name = $file->getClientOriginalName();
