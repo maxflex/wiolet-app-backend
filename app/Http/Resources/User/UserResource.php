@@ -4,6 +4,7 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Photo\PhotoResource;
+use App\Http\Resources\City\CityResource;
 
 class UserResource extends JsonResource
 {
@@ -11,8 +12,9 @@ class UserResource extends JsonResource
     {
         return extractFields($this, [
             'id', 'name', 'email', 'gender', 'birthdate', 'about',
-            'height', 'weight', 'phone', 'is_online', 'city'
+            'height', 'weight', 'phone', 'is_online',
         ], [
+            'city' => new CityResource($this->city),
             'photos' => PhotoResource::collection($this->photos),
             'preferences' => new UserPreferenceResource($this->preferences),
         ]);
