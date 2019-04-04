@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Utils\Phone;
 use App\Models\{Photo, Event\Event, Geo\City};
+use Redis;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -55,6 +56,11 @@ class User extends Authenticatable implements JWTSubject
     public function events()
     {
         return $this->hasMany(Event::class, 'user_id_from');
+    }
+
+    public function getIsOnlineAttribute()
+    {
+        return Redis::get(cacheKey('online', $this->id)) !== null;
     }
 
     public function setPasswordAttribute($password)

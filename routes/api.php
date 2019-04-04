@@ -51,7 +51,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
         Route::post('sockets', 'AuthController@sockets');
     });
 
-    Route::middleware('auth:api')->group(function() {
+    Route::middleware(['auth:api', 'online'])->group(function() {
         Route::apiResources([
             'photos' => 'PhotosController',
             'messages' => 'MessagesController',
