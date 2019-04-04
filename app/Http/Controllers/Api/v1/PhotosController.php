@@ -23,7 +23,7 @@ class PhotosController extends Controller
                 'filename' => $filename
             ]);
         }
-        return response(null, 201);
+        return emptyResponse();
     }
 
     public function destroy($id)
