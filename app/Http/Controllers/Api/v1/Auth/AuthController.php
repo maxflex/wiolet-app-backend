@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return errorMessageResponse(__('auth.wrong-credentials'), 401);
+            return errorMessageResponse(__('auth.wrong-credentials'), 403);
         }
 
         return $this->respondWithToken($token);
