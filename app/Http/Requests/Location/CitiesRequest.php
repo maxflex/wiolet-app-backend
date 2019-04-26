@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\City;
+namespace App\Http\Requests\Location;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class IndexRequest extends FormRequest
+class CitiesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

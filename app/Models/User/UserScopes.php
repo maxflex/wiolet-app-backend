@@ -87,6 +87,16 @@ trait UserScopes
     }
 
     /**
+     * Функция блокировки
+     *
+     * Есть событие user_1 к user_2 - код 3 или код 6
+     */
+    public function scopeBannedBy(Builder $query, int $userId) : Builder
+    {
+        return $query->whereRaw("EXISTS (SELECT 1 FROM events WHERE user_id_from = {$userId} AND user_id_to = users.id AND `type` IN (3, 6))");
+    }
+
+    /**
      * Функция обратной блокировки
      *
      * Есть событие user_2 к user_1 - код 3 или код 6
@@ -256,4 +266,7 @@ trait UserScopes
 
         return false;
     }
+
+    // FIXME: на случай, если придется выбрать одного из двух пользователей (НЕ СЕБЯ)
+    // ->selectRaw(sprintf("IF(user_id_from = %d, user_id_to, user_id_from) as user_id", auth()->id()))
 }

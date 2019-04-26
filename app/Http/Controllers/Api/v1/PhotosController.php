@@ -9,6 +9,22 @@ use App\Http\Resources\Photo\PhotoResource;
 
 class PhotosController extends Controller
 {
+    /**
+     * Drag-n-drop фоток
+     *
+     * $request->photos = [
+     *      ['id' => 16, 'position' => 0],
+     *      ['id' => 11, 'position' => 1],
+     * ]
+     */
+    public function update(Request $request)
+    {
+        foreach($request->all() as $photo) {
+            Photo::whereId($photo['id'])->update(['position' => $photo['position']]);
+        }
+        return emptyResponse();
+    }
+
     public function store(Request $request)
     {
         $this->validate($request, [

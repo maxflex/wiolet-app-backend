@@ -9,7 +9,7 @@ class PhotoResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'url'
+            'id', 'url', 'position'
         ]);
     }
 }

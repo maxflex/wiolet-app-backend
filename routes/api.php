@@ -27,7 +27,10 @@ Route::namespace('Api\crm')->prefix('crm')->middleware('auth:api')->group(functi
 });
 
 Route::namespace('Api\v1')->prefix('v1')->group(function () {
-    Route::apiResource('cities', 'CitiesController');
+    Route::prefix('location')->group(function () {
+        Route::get('cities', 'LocationController@cities');
+        Route::get('determine', 'LocationController@determine');
+    });
 
     Route::prefix('auth')->namespace('Auth')->group(function() {
         Route::post('refresh', 'AuthController@refresh');
@@ -52,6 +55,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth:api', 'online'])->group(function() {
+
+        Route::put('photos', 'PhotosController@update');
         Route::apiResources([
             'photos' => 'PhotosController',
             'messages' => 'MessagesController',
@@ -66,6 +71,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
            Route::get('show', 'CardsController@show');
         });
 
+        Route::get('lists/counts', 'ListsController@counts');
         Route::get('lists', 'ListsController@index');
     });
 });

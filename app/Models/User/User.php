@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Utils\Phone;
 use App\Models\{Photo, Event\Event, Geo\City};
+use App\Models\User\Enums\Gender;
 use Redis;
 
 class User extends Authenticatable implements JWTSubject
@@ -17,6 +18,9 @@ class User extends Authenticatable implements JWTSubject
     protected $fillable = [
         'name', 'email', 'password', 'birthdate', 'gender',
         'phone', 'city_id', 'about', 'height', 'weight',
+        'body_type', 'hair_color', 'eye_color', 'kids',
+        'lives', 'alcohol', 'smoking', 'company', 'occupation',
+        'university'
     ];
 
     protected $hidden = [
@@ -88,14 +92,35 @@ class User extends Authenticatable implements JWTSubject
         return intval(date('Y')) - intval(date('Y', strtotime($this->birthdate)));
     }
 
+    /**
+     * Предпочтения по умолчанию
+     */
+    private function getDefaultPreferences()
+    {
+        $defaultPreferences['gender'] = $this->gender === Gender::MALE ? Gender::FEMALE : Gender::MALE;
+
+        if ($this->age === 18) {
+            $defaultPreferences['age_from'] = 18;
+            $defaultPreferences['age_to'] = 20;
+        } else if ($this->gender === Gender::MALE) {
+            $defaultPreferences['age_from'] = $this->age - 10;
+            if ($defaultPreferences['age_from'] < 18) {
+                $defaultPreferences['age_from'] = 18;
+            }
+        } else  {
+            $defaultPreferences['age_from'] = $this->age + 10;
+            if ($defaultPreferences['age_from'] > 75) {
+                $defaultPreferences['age_from'] = 75;
+            }
+        }
+    }
+
     public static function boot()
     {
         parent::boot();
 
         static::created(function($model) {
-            $model->preferences()->create([
-                'gender' => $model->gender === 'male' ? 'female' : 'male'
-            ]);
+            $model->preferences()->create($model->getDefaultPreferences());
         });
     }
 }

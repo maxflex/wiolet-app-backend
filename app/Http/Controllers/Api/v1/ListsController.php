@@ -22,8 +22,30 @@ class ListsController extends Controller
             ]
         ]);
 
-        $items = User::{toCamelCase($request->name) . 'List'}(auth()->id())->get();
+        $items = $this->getList(new UserList($request->name))->get();
 
         return UserListResource::collection($items);
+    }
+
+    /**
+     * Получить ID всех пользователей в списках
+     */
+    public function counts()
+    {
+        $result = [];
+        foreach(UserList::toArray() as $listName) {
+            $result[$listName] = $this->getList(new UserList($listName))->pluck('id');
+        }
+        return $result;
+    }
+
+    /**
+     * Получить список
+     *
+     * @param UserList $list название списка
+     */
+    private function getList(UserList $list)
+    {
+        return User::{toCamelCase($list->getValue()) . 'List'}(auth()->id());
     }
 }
