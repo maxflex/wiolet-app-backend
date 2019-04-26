@@ -89,7 +89,15 @@ class User extends Authenticatable implements JWTSubject
 
     public function getAgeAttribute()
     {
-        return intval(date('Y')) - intval(date('Y', strtotime($this->birthdate)));
+        // это бомжатство вследствие того, что в хуке created дата
+        // возвращается как DateTime, а во всех остальных как String
+        // (воспроизводится в UserFactory)
+        if ($this->birthdate instanceof \Datetime) {
+            $birthdate = $this->birthdate->format(FORMAT_DATE);
+        } else {
+            $birthdate = $this->birthdate;
+        }
+        return intval(date('Y')) - intval(date('Y', strtotime($birthdate)));
     }
 
     /**
@@ -113,6 +121,8 @@ class User extends Authenticatable implements JWTSubject
                 $defaultPreferences['age_from'] = 75;
             }
         }
+
+        return $defaultPreferences;
     }
 
     public static function boot()

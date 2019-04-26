@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-use App\Models\UserPreference;
+use App\Models\User\UserPreference;
 
 $factory->define(UserPreference::class, function (Faker $faker) {
     $ageFrom = $faker->numberBetween(18, 35);

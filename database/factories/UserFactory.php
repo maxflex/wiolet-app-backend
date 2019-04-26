@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User\{User, UserPreference};
+use App\Models\User\Enums\{BodyType, HairColor, EyeColor, Kids, Lives, Alcohol, Smoking};
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use App\Models\Geo\City;
@@ -28,7 +29,17 @@ $factory->define(User::class, function (Faker $faker) {
         'phone' => '79001112233',
         'height' => $faker->numberBetween(160, 205),
         'weight' => $faker->numberBetween(45, 110),
-        'city_id' => City::inRandomOrder()->value('id')
+        'city_id' => City::inRandomOrder()->value('id'),
+        'body_type' => collect(BodyType::toArray())->random(),
+        'hair_color' => collect(HairColor::toArray())->random(),
+        'eye_color' => collect(EyeColor::toArray())->random(),
+        'kids' => collect(Kids::toArray())->random(),
+        'lives' => collect(Lives::toArray())->random(),
+        'alcohol' => collect(Alcohol::toArray())->random(),
+        'smoking' => collect(Smoking::toArray())->random(),
+        'company' => $faker->company(),
+        'occupation' => $faker->jobTitle(),
+        'university' => collect([null, null, 'НИУ ВШЭ', 'МГУ', 'МГИМО', 'Архитектурный колледж'])->random(),
     ];
 });
 
