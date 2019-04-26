@@ -39,7 +39,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function photos()
     {
-        return $this->hasMany(Photo::class);
+        return $this->hasMany(Photo::class)->orderBy('position');
     }
 
     public function preferences()
