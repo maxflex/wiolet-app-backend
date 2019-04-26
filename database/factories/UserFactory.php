@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\{User, UserPreference};
+use App\Models\User\{User, UserPreference};
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
 use App\Models\Geo\City;

@@ -11,7 +11,7 @@ class UsersSeeder extends Seeder
      */
     public function run()
     {
-        \DB::table('users')->where('id', '>', 1)->delete();
-        factory(App\Models\User::class, 50)->create();
+        // \DB::table('users')->where('id', '>', 1)->delete();
+        factory(App\Models\User\User::class, 100)->create();
     }
 }
