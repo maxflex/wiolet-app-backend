@@ -20,6 +20,6 @@ class ProfileController extends Controller
         if (isset($request->preferences)) {
             auth()->user()->preferences()->update($request->preferences);
         }
-        return new UserResource(auth()->user());
+        return new UserResource(auth()->user()->fresh());
     }
 }
