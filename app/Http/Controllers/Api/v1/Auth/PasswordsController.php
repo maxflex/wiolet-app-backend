@@ -19,7 +19,7 @@ class PasswordsController extends Controller
         $this->validate($request, [
             'email' => 'required|email'
         ]);
-        $token = md5($request->email . mt_rand(10000, 99999));
+        $token = md5($request->email . mt_rand(1000, 9999));
         Redis::set(cacheKey(self::CACHE_KEY, $token), $request->email, 'EX', 60 * 10);
         return response(compact('token'));
     }

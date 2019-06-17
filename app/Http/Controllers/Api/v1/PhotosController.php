@@ -49,5 +49,6 @@ class PhotosController extends Controller
         $item = Photo::find($id);
         $this->authorize('delete', $item);
         $item->delete();
+        return emptyResponse();
     }
 }

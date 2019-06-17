@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('b35440bf12648de8cce0', {
+      cluster: 'eu',
+      forceTLS: true,
+      authEndpoint: 'http://wiolet.test/api/v1/auth/sockets',
+      auth: {
+        headers: {
+          'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC93aW9sZXQudGVzdFwvYXBpXC92MVwvYXV0aFwvbG9naW4iLCJpYXQiOjE1NTkxMjcxNDgsImV4cCI6MTU1OTEzMDc0OCwibmJmIjoxNTU5MTI3MTQ4LCJqdGkiOiJWdlRPZnBsTXpzcWd0RURSIiwic3ViIjoxLCJwcnYiOiJiOTEyNzk5NzhmMTFhYTdiYzU2NzA0ODdmZmYwMWUyMjgyNTNmZTQ4In0.Xa8qi22UgFvFy4T0q3RamiBQbkaPnQJKMpRfBE949Kk'
+        }
+      }
+    });
+
+    var channel = pusher.subscribe('private-user-channel.1');
+    channel.bind('event', function(data) {
+      console.log(JSON.stringify(data));
+    });
+  </script>
+</head>
+<body>
+  <h1>Pusher Test</h1>
+  <p>
+    Try publishing an event to channel <code>private-user-channel.1</code>
+    with event name <code>event</code>.
+  </p>
+</body>

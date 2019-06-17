@@ -34,6 +34,7 @@ class IncomingEvent implements ShouldBroadcast
 
     public function broadcastOn()
     {
-        return new PrivateChannel('user-channel.' . $this->event->user_id_to);
+        return new Channel('user-channel.' . $this->event->user_id_to);
+        // return new PrivateChannel('user-channel.' . $this->event->user_id_to);
     }
 }

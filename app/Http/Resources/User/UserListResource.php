@@ -10,7 +10,7 @@ class UserListResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'name', 'gender'
+            'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen'
         ], [
             'photo_url' => count($this->photos) > 0 ? $this->photos[0]->url : null,
         ]);

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\User\UserResource;
 use App\Models\User\User;
+use App\Http\Requests\Profile\UpdateRequest;
 
 class ProfileController extends Controller
 {
@@ -14,7 +15,7 @@ class ProfileController extends Controller
         return new UserResource(auth()->user());
     }
 
-    public function update(Request $request)
+    public function update(UpdateRequest $request)
     {
         auth()->user()->update($request->all());
         if (isset($request->preferences)) {

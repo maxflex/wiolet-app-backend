@@ -52,7 +52,6 @@ class AuthController extends Controller
         return Broadcast::auth($request);
     }
 
-
     protected function respondWithToken($token)
     {
         return response()->json([

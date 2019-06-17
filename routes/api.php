@@ -52,12 +52,17 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
             return response(null, 200);
         });
         Route::post('sockets', 'AuthController@sockets');
+
+        Route::get('social/register/{service}', 'SocialController@register');
+        Route::get('social/{service}', 'SocialController@redirect');
     });
 
     Route::middleware(['auth:api', 'online'])->group(function() {
 
         Route::put('photos', 'PhotosController@update');
         Route::apiResources([
+            'feedback' => 'FeedbackController',
+            'users' => 'UsersController',
             'photos' => 'PhotosController',
             'messages' => 'MessagesController',
         ]);
@@ -69,6 +74,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
 
         Route::prefix('cards')->group(function() {
            Route::get('show', 'CardsController@show');
+           Route::post('see', 'CardsController@see');
         });
 
         Route::get('lists/counts', 'ListsController@counts');

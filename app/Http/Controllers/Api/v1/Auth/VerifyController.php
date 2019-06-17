@@ -22,7 +22,7 @@ class VerifyController extends Controller
             ]);
         }
         $phone = Phone::clean($request->phone);
-        $code = mt_rand(10000, 99999);
+        $code = mt_rand(1000, 9999);
         Redis::set(cacheKey('codes', $phone), $code, 'EX', 120);
         Sms::send($phone, __('auth.sms-code', compact('code')), false);
         // return response()->json(compact('code'));

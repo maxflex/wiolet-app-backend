@@ -40,7 +40,8 @@ class IncomingMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user-channel.' . $this->message->user_id_to);
+        return new Channel('user-channel.' . $this->message->user_id_to);
+        // return new PrivateChannel('user-channel.' . $this->message->user_id_to);
     }
 
     public function broadcastWith()

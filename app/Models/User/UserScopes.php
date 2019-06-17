@@ -109,7 +109,7 @@ trait UserScopes
     /**
      * Ещё не лайкнутые анкеты пользователем $userId
      */
-    public function scopeNotLiked(Builder $query, int $userId) : Builder
+    public function scopeNotLikedBy(Builder $query, int $userId) : Builder
     {
         return $query->lastActionNotEquals($userId, EventType::LIKE());
         // return $query->whereRaw("NOT((SELECT `type` FROM events WHERE user_id_from = {$userId} AND user_id_to = users.id ORDER BY id DESC LIMIT 1) <=> '" . EventType::LIKE . "')");

@@ -7,7 +7,12 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use App\Utils\Phone;
-use App\Models\{Photo, Event\Event, Geo\City};
+use App\Models\{
+    Photo,
+    Event\Event,
+    Geo\City,
+    Feedback\Feedback
+};
 use App\Models\User\Enums\Gender;
 use Redis;
 
@@ -20,7 +25,7 @@ class User extends Authenticatable implements JWTSubject
         'phone', 'city_id', 'about', 'height', 'weight',
         'body_type', 'hair_color', 'eye_color', 'kids',
         'lives', 'alcohol', 'smoking', 'company', 'occupation',
-        'university'
+        'university', 'is_hidden'
     ];
 
     protected $hidden = [
@@ -45,6 +50,11 @@ class User extends Authenticatable implements JWTSubject
     public function preferences()
     {
         return $this->hasOne(UserPreference::class);
+    }
+
+    public function feedback()
+    {
+        return $this->hasMany(Feedback::class);
     }
 
     public function city()

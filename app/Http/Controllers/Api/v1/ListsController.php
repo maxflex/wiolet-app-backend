@@ -22,7 +22,7 @@ class ListsController extends Controller
             ]
         ]);
 
-        $items = $this->getList(new UserList($request->name))->get();
+        $items = $this->getList(new UserList($request->name))->paginate(20);
 
         return UserListResource::collection($items);
     }

@@ -36,6 +36,13 @@ function emptyResponse()
     return response(null, 204);
 }
 
+/**
+ * закодировать – раскодировать в JSON
+ */
+function jsonRedecode($data) {
+    return json_decode(json_encode($data));
+}
+
 function successResponse(string $message)
 {
     return response()->json(compact('message'), 200);

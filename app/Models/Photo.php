@@ -19,7 +19,7 @@ class Photo extends Model
     {
         parent::boot();
 
-        static::created(function($model) {
+        static::creating(function($model) {
             $model->position = self::where('user_id', $model->user_id)->max('position') + 1;
         });
     }
