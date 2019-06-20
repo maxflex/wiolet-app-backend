@@ -13,7 +13,7 @@ class UserResource extends JsonResource
         return extractFields($this, [
             'id', 'name', 'email', 'gender', 'birthdate', 'about',
             'height', 'weight', 'phone', 'is_online', 'university',
-            'body_type', 'hair_color', 'eye_color', 'kids',
+            'body_type', 'hair_color', 'eye_color', 'kids', 'is_hidden',
             'lives', 'alcohol', 'smoking', 'company', 'occupation',
         ], [
             'city' => new CityResource($this->city),
