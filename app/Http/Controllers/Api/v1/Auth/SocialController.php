@@ -10,6 +10,7 @@ use App\Models\{
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Socialite;
+use App\Http\Resources\User\UserResource;
 
 /**
  * Авторизация через соцсети
@@ -29,6 +30,7 @@ class SocialController extends Controller
         );
         $newUser->service = $service;
         $newUser->save();
+        return new UserResource($newUser);
         // logger(json_encode($user, JSON_PRETTY_PRINT));
     }
 

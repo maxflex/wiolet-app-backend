@@ -71,6 +71,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
 
         Route::get('profile', 'ProfileController@show');
         Route::put('profile', 'ProfileController@update');
+        Route::delete('profile', 'ProfileController@delete');
 
         Route::prefix('cards')->group(function() {
            Route::get('show', 'CardsController@show');

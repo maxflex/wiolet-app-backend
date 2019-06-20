@@ -23,4 +23,10 @@ class ProfileController extends Controller
         }
         return new UserResource(auth()->user()->fresh());
     }
+
+    public function delete()
+    {
+        auth()->user()->delete();
+        return emptyResponse();
+    }
 }
