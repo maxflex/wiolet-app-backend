@@ -9,6 +9,14 @@ use DB;
 trait UserScopes
 {
     /**
+     * Не скрытые анкеты
+     */
+    public function scopeNotHidden(Builder $query) : Builder
+    {
+        return $query->where('is_hidden', 0);
+    }
+
+    /**
      * Исключить уже просмотренные анкеты
      */
     public function scopeExcludeSeen(Builder $query, int $userId) : Builder

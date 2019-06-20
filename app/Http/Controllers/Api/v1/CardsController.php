@@ -40,6 +40,7 @@ class CardsController extends Controller
             ->notBanned($user->id)
             ->notBannedReverse($user->id)
             ->notLikedBy($user->id)
+            ->notHidden()
             ->inRandomOrder();
 
         $items = $query->take(3)->get();
