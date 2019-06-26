@@ -18,4 +18,10 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'user_id_from');
     }
+
+    public function scopeMutual($query, int $userIdFrom, int $userIdTo)
+    {
+        return $query
+            ->whereRaw("((user_id_from = {$userIdFrom} and user_id_to = {$userIdTo}) or (user_id_from = {$userIdTo} and user_id_to = {$userIdFrom}))");
+    }
 }

@@ -231,6 +231,15 @@ trait UserScopes
     }
 
     /**
+     * Показывать только новых (от меня ему не было никаких событий)
+     */
+    public function scopeOnlyNew(Builder $query) : Builder
+    {
+        return $query
+            ->whereRaw("NOT EXISTS (SELECT 1 FROM events WHERE user_id_from = users.id)");
+    }
+
+    /**
      * Функция проверки дизлайков
      *
      * Получаем стек всех записей от user_1 к user_2

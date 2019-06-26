@@ -29,10 +29,11 @@ class CardsController extends Controller
         $user = auth()->user();
         $preferences = $user->preferences;
 
-        $query = User::excludeSeen($user->id)
+        $query = User::query()
             ->join('user_preferences as preferences', 'preferences.user_id', '=', 'users.id')
             ->where('users.id', '<>', $user->id)
             ->where('users.city_id', $user->city_id)
+            ->onlyNew()
             ->matchGender($preferences->gender)
             ->matchGenderReverse($user->gender)
             ->matchAge($preferences->age_from, $preferences->age_to)
@@ -59,13 +60,5 @@ class CardsController extends Controller
         // }
 
         return CardResource::collection($items);
-    }
-
-    public function see(SeeRequest $request)
-    {
-        auth()->user()->see(
-            User::find($request->user_id)
-        );
-        return response(null, 204);
     }
 }

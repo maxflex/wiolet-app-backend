@@ -27,6 +27,7 @@ class UpdateRequest extends FormRequest
         return [
             'password' => ['nullable', 'required_with:password_confirmation', 'string', 'min:6', 'confirmed'],
             'current_password' => ['required_with:password', 'string', 'min:6'],
+            'email' => ['unique:users'],
         ];
     }
 
@@ -41,5 +42,12 @@ class UpdateRequest extends FormRequest
                 }
             }
         });
+    }
+
+    public function messages()
+    {
+        return [
+            'email.unique' => 'Такой email уже используется'
+        ];
     }
 }

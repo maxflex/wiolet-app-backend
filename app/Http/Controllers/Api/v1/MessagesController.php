@@ -64,6 +64,7 @@ class MessagesController extends Controller
         // сделать MessageStoreRequest
         $this->validate($request, [
             'text' => ['required', 'string'],
+            'uid' => ['required', 'unique:messages'],
             'user_id_to' => ['required', 'exists:users,id']
         ]);
 
@@ -74,5 +75,11 @@ class MessagesController extends Controller
         event(new IncomingMessage($item));
 
         return new MessageResource($item);
+    }
+
+    public function update(Request $request, Message $message)
+    {
+        $message->update($request->all());
+        return emptyResponse();
     }
 }

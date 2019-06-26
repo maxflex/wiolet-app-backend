@@ -62,11 +62,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(City::class);
     }
 
-    public function seen()
-    {
-        return $this->hasManyThrough(User::class, UserSeenCard::class, 'user_id', 'id', 'id', 'card_id');
-    }
-
     public function events()
     {
         return $this->hasMany(Event::class, 'user_id_from');
@@ -82,14 +77,6 @@ class User extends Authenticatable implements JWTSubject
         if (! empty($password)) {
             $this->attributes['password'] = bcrypt($password);
         }
-    }
-
-    public function see(User $card)
-    {
-        UserSeenCard::create([
-            'user_id' => $this->id,
-            'card_id' => $card->id,
-        ]);
     }
 
     public function setPhoneAttribute($value)
