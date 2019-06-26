@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\UserResource;
+use App\Http\Resources\Profile\ProfileResource;
 use App\Models\User\User;
 use App\Http\Requests\Profile\UpdateRequest;
 
@@ -21,7 +21,7 @@ class ProfileController extends Controller
         if (isset($request->preferences)) {
             auth()->user()->preferences()->update($request->preferences);
         }
-        return new UserResource(auth()->user()->fresh());
+        return new ProfileResource(auth()->user()->fresh());
     }
 
     public function delete()
