@@ -12,15 +12,13 @@ class PhotosController extends Controller
     /**
      * Drag-n-drop фоток
      *
-     * $request->photos = [
-     *      ['id' => 16, 'position' => 0],
-     *      ['id' => 11, 'position' => 1],
-     * ]
+     * $request->photos = [16, 11, ... 2]
+     * ID фоток в нужном порядке
      */
     public function update(Request $request)
     {
-        foreach($request->all() as $photo) {
-            Photo::whereId($photo['id'])->update(['position' => $photo['position']]);
+        foreach($request->photos as $index => $photoId) {
+            Photo::whereId($photoId)->update(['position' => $index]);
         }
         return emptyResponse();
     }
