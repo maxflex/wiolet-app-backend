@@ -12,7 +12,7 @@ class ProfileController extends Controller
 {
     public function show()
     {
-        return new UserResource(auth()->user());
+        return new ProfileResource(auth()->user());
     }
 
     public function update(UpdateRequest $request)
