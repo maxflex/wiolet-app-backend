@@ -53,8 +53,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function () {
         });
         Route::post('sockets', 'AuthController@sockets');
 
-        Route::get('social/register/{service}', 'SocialController@register');
-        Route::get('social/{service}', 'SocialController@redirect');
+        Route::get('social/{service}', 'SocialController@register');
     });
 
     Route::middleware(['auth:api', 'online'])->group(function() {

@@ -9,44 +9,43 @@ use App\Models\{
 };
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Socialite;
 use App\Http\Resources\User\UserResource;
+use GuzzleHttp\Client;
 
 /**
  * Авторизация через соцсети
  */
 class SocialController extends Controller
 {
-    public function redirect($service)
+    public function register($service, Request $request)
     {
-        return Socialite::with($service)->stateless()->redirect();
-    }
-
-
-    public function register($service)
-    {
-        $newUser = $this->{"createUser" . ucfirst($service)}(
-            jsonRedecode(Socialite::driver($service)->stateless()->user())
-        );
-        $newUser->service = $service;
-        $newUser->save();
-        return new UserResource($newUser);
+        $user = $this->{"createUser" . ucfirst($service)}($request);
+        $user->service = $service;
+        $user->save();
+        return $user;
         // logger(json_encode($user, JSON_PRETTY_PRINT));
     }
 
-    private function createUserInstagram($user)
+    private function createUserInstagram(Request $request)
     {
-        $user = $user->user;
-        $newUser = User::create([
-            'name' => $user->full_name,
+        $client = new Client(['base_uri' => 'https://api.instagram.com/v1/']);
+        $response = $client->get('users/self', [
+            'query' => [
+                'access_token' => $request->access_token
+            ]
+        ]);
+        $response = json_decode($response->getBody());
+        $user = User::create([
+            'name' => $response->data->full_name,
+            'service_id' => $response->data->id,
         ]);
         $filename = uniqid() . '.jpg';
-        file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($user->profile_picture, 'r'));
+        file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($response->data->profile_picture, 'r'));
 
-        $newUser->photos()->create([
+        $user->photos()->create([
             'filename' => $filename
         ]);
 
-        return $newUser;
+        return $user;
     }
 }
