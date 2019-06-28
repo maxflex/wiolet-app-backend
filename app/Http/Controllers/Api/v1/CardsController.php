@@ -6,8 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User\User;
 use App\Models\Event\EventType;
-use App\Http\Resources\Card\CardResource;
-use App\Http\Requests\Card\SeeRequest;
+use App\Http\Resources\User\UserResource;
 
 class CardsController extends Controller
 {
@@ -29,7 +28,7 @@ class CardsController extends Controller
         $user = auth()->user();
         $preferences = $user->preferences;
 
-        $query = User::query()
+        $query = User::select('users.*')
             ->join('user_preferences as preferences', 'preferences.user_id', '=', 'users.id')
             ->where('users.id', '<>', $user->id)
             ->where('users.city_id', $user->city_id)
@@ -59,6 +58,6 @@ class CardsController extends Controller
         //     self::show();
         // }
 
-        return CardResource::collection($items);
+        return UserResource::collection($items);
     }
 }

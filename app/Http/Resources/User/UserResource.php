@@ -15,11 +15,14 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
 
+        $latestEventFromMe = Event::getLatest(auth()->id(), $this->id);
+        $latestEventFromThem = Event::getLatest($this->id, auth()->id());
+
         return extractFields($this, [
             'id', 'name', 'gender', 'birthdate', 'about',
             'height', 'weight', 'phone', 'is_online', 'university',
             'body_type', 'hair_color', 'eye_color', 'kids', 'is_hidden',
-            'lives', 'alcohol', 'smoking', 'company', 'occupation',
+            'lives', 'alcohol', 'smoking', 'company', 'occupation', 'last_seen'
         ], [
             'is_banned' => User::query()
                 ->whereId($this->id)
@@ -30,9 +33,10 @@ class UserResource extends JsonResource
 
             'photos' => PhotoResource::collection($this->photos),
 
-            'events' => EventResource::collection(
-                Event::mutual(auth()->id(), $this->id)->get()
-            ),
+            'events' => [
+                'me' => $latestEventFromMe === null ? null : new EventResource($latestEventFromMe),
+                'them' => $latestEventFromThem === null ? null : new EventResource($latestEventFromThem),
+            ],
 
             'total_messages' => Message::query()
                 ->where('user_id_from', $this->id)

@@ -4,6 +4,7 @@ namespace App\Models\Event;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User\User;
+use App\Http\Resources\Event\EventResource;
 
 class Event extends Model
 {
@@ -23,5 +24,10 @@ class Event extends Model
     {
         return $query
             ->whereRaw("((user_id_from = {$userIdFrom} and user_id_to = {$userIdTo}) or (user_id_from = {$userIdTo} and user_id_to = {$userIdFrom}))");
+    }
+
+    public static function getLatest(int $userIdFrom, int $userIdTo)
+    {
+        return self::where('user_id_from', $userIdFrom)->where('user_id_to', $userIdTo)->latest()->first();
     }
 }

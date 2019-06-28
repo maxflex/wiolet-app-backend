@@ -14,6 +14,8 @@ class EventResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return extractFields($this, [
+            'id', 'user_id_from', 'user_id_to', 'type', 'created_at'
+        ]);
     }
 }

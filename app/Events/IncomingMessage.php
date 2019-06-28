@@ -9,8 +9,11 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\Http\Resources\Message\MessageResource;
-use App\Models\Message;
+use App\Http\Resources\{
+    User\UserShortResource,
+    Message\MessageResource
+};
+use App\Models\{Message, User\User};
 
 class IncomingMessage implements ShouldBroadcast
 {
@@ -48,9 +51,8 @@ class IncomingMessage implements ShouldBroadcast
     {
         // return new MessageResource($this->message);
         return [
-            'id' => $this->message->id,
-            'text' => $this->message->text,
-            'user_id_to' => $this->message->user_id_to,
+            'user' => new UserShortResource(User::find($this->message->user_id_from)),
+            'message' => new MessageResource($this->message)
         ];
     }
 }
