@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api\v1\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Redis;
-use User;
+use App\Mail\ResetPassword;
+use Redis, User, Mail;
 
 class PasswordsController extends Controller
 {
@@ -20,8 +20,13 @@ class PasswordsController extends Controller
             'email' => 'required|email'
         ]);
         $token = md5($request->email . mt_rand(1000, 9999));
+        Mail::to($request->email)->send(new ResetPassword([
+            'email' => $request->email,
+            'token' => $token,
+            'time' => time()
+        ]));
         Redis::set(cacheKey(self::CACHE_KEY, $token), $request->email, 'EX', 60 * 10);
-        return response(compact('token'));
+        return emptyResponse();
     }
 
     /**

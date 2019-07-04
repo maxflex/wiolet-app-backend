@@ -25,11 +25,16 @@ class User extends Authenticatable implements JWTSubject
         'phone', 'city_id', 'about', 'height', 'weight',
         'body_type', 'hair_color', 'eye_color', 'kids',
         'lives', 'alcohol', 'smoking', 'company', 'occupation',
-        'university', 'is_hidden', 'service_id'
+        'university', 'is_hidden', 'service_id', 'device_token',
+        'notifications'
     ];
 
     protected $hidden = [
         'password'
+    ];
+
+    protected $casts = [
+        'notifications' => 'array'
     ];
 
     public function getJWTIdentifier()
@@ -125,6 +130,15 @@ class User extends Authenticatable implements JWTSubject
     public static function boot()
     {
         parent::boot();
+
+        static::creating(function ($model) {
+            $model->notifications = [
+                'mutualLike' => true,
+                'wantToMeet' => true,
+                'messages' => true,
+                'promo' => true
+            ];
+        });
 
         static::created(function($model) {
             $model->preferences()->create($model->getDefaultPreferences());

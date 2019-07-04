@@ -15,7 +15,7 @@ class ProfileResource extends JsonResource
             'id', 'name', 'email', 'gender', 'birthdate', 'about',
             'height', 'weight', 'phone', 'is_online', 'university',
             'body_type', 'hair_color', 'eye_color', 'kids', 'is_hidden',
-            'lives', 'alcohol', 'smoking', 'company', 'occupation',
+            'lives', 'alcohol', 'smoking', 'company', 'occupation', 'notifications'
         ], [
             'city' => new CityResource($this->city),
             'photos' => PhotoResource::collection($this->photos),
