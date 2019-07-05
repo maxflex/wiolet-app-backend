@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\v1\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\ResetPassword;
-use Redis, User, Mail;
+use Redis, Mail;
+use App\Models\User\User;
+
 
 class PasswordsController extends Controller
 {
