@@ -19,9 +19,11 @@ class SocialController extends Controller
 {
     public function register($service, Request $request)
     {
-        $user = $this->{"createUser" . ucfirst($service)}($request);
-        $user->service = $service;
-        $user->save();
+        $user = $this->{"createUser" . ucfirst($service)}($service, $request);
+        if ($user->wasRecentlyCreated) {
+            $user->service = $service;
+            $user->save();
+        }
         $token = auth()->login($user);
         return [
             'user' => new ProfileResource($user->fresh()),
@@ -29,7 +31,7 @@ class SocialController extends Controller
         ];
     }
 
-    private function createUserInstagram(Request $request)
+    private function createUserInstagram($service, Request $request)
     {
         $client = new Client(['base_uri' => 'https://api.instagram.com/v1/']);
         $response = $client->get('users/self', [
@@ -38,16 +40,27 @@ class SocialController extends Controller
             ]
         ]);
         $response = json_decode($response->getBody());
-        $user = User::create([
-            'name' => $response->data->full_name,
-            'service_id' => $response->data->id,
-        ]);
-        $filename = uniqid() . '.jpg';
-        file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($response->data->profile_picture, 'r'));
 
-        $user->photos()->create([
-            'filename' => $filename
-        ]);
+        // сначала пытаемся найти по servece_id
+        $user = User::query()
+            ->where('service_id', $response->data->id)
+            ->where('service', $service)
+            ->first();
+
+        // если не нашелся
+        if ($user === null) {
+            $user = User::create([
+                'name' => $response->data->full_name,
+                'service_id' => $response->data->id,
+            ]);
+
+            $filename = uniqid() . '.jpg';
+            file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($response->data->profile_picture, 'r'));
+
+            $user->photos()->create([
+                'filename' => $filename
+            ]);
+        }
 
         return $user;
     }
