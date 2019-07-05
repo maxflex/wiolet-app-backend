@@ -9,7 +9,7 @@ use App\Models\{
 };
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User\UserResource;
+use App\Http\Resources\Profile\ProfileResource;
 use GuzzleHttp\Client;
 
 /**
@@ -22,8 +22,11 @@ class SocialController extends Controller
         $user = $this->{"createUser" . ucfirst($service)}($request);
         $user->service = $service;
         $user->save();
-        return $user;
-        // logger(json_encode($user, JSON_PRETTY_PRINT));
+        $token = auth()->login($user);
+        return [
+            'user' => new ProfileResource($user->fresh()),
+            'access_token' => $token,
+        ];
     }
 
     private function createUserInstagram(Request $request)
