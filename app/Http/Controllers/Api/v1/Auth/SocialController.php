@@ -50,18 +50,27 @@ class SocialController extends Controller
         // если не нашелся
         if ($user === null) {
             $user = User::create([
-                'name' => $response->data->full_name,
+                'name' => $this->getName($response->data->full_name),
                 'service_id' => $response->data->id,
             ]);
 
-            $filename = uniqid() . '.jpg';
-            file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($response->data->profile_picture, 'r'));
+            // $filename = uniqid() . '.jpg';
+            // file_put_contents(storage_path('app/public/' . Photo::UPLOAD_PATH . $filename), fopen($response->data->profile_picture, 'r'));
 
-            $user->photos()->create([
-                'filename' => $filename
-            ]);
+            // $user->photos()->create([
+            //     'filename' => $filename
+            // ]);
         }
 
         return $user;
+    }
+
+    private function getName($name)
+    {
+        $name = preg_replace('/[^a-zA-Zа-яА-Я0-9]/ui', '', $name);
+        if (strlen($name) > 2 && strlen($name) <= 15) {
+            return $name;
+        }
+        return null;
     }
 }

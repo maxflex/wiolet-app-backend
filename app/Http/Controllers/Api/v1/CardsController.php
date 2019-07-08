@@ -32,7 +32,7 @@ class CardsController extends Controller
             ->join('user_preferences as preferences', 'preferences.user_id', '=', 'users.id')
             ->where('users.id', '<>', $user->id)
             ->where('users.city_id', $user->city_id)
-            ->onlyNew()
+            ->onlyNew($user->id)
             ->matchGender($preferences->gender)
             ->matchGenderReverse($user->gender)
             ->matchAge($preferences->age_from, $preferences->age_to)
