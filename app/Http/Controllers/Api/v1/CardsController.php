@@ -43,7 +43,7 @@ class CardsController extends Controller
             ->notHidden()
             ->inRandomOrder();
 
-        $items = $query->take(3)->get();
+        $items = $query->take(5)->get();
 
         // Больше нет карт
         // if ($item === null) {
