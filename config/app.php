@@ -176,6 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -228,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'User' => App\Models\User::class,
         'Enum' => MyCLabs\Enum\Enum::class,
+        'Image' => Intervention\Image\Facades\Image::class
         // 'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
     ],
 

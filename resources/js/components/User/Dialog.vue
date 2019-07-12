@@ -41,6 +41,7 @@
                   <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model='item.weight' label="Вес, кг." />
                   </div>
+
                   <div class='headline mb-4 mt-5'>Предпочтения</div>
                   <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model='item.preferences.age_from' label="Возраст, от" />
@@ -50,6 +51,24 @@
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect :items='GENDER' label='Пол' v-model='item.preferences.gender' />
+                  </div>
+
+                  <div class='headline mb-4 mt-5' v-if='notRemovedPhotos.length > 0'>Фото</div>
+
+                  <div class='photos'>
+                    <v-hover v-for='photo in notRemovedPhotos' :key='photo.id'>
+                      <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
+                        <img :src='photo.url' />
+                        <v-slide-y-reverse-transition>
+                          <div class='photo-actions' v-show='hover'>
+                            <div @click="removePhoto(photo)">
+                              <v-icon>close</v-icon>
+                              <span>удалить</span>
+                            </div>
+                          </div>
+                        </v-slide-y-reverse-transition>
+                      </v-avatar>
+                    </v-hover>
                   </div>
                 </div>
               </v-flex>
@@ -84,6 +103,7 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       GENDER,
+      trigger: 0,
     }
   },
 
@@ -91,7 +111,56 @@ export default {
   
 
   methods: {
+    removePhoto(photo) {
+      photo.is_deleted = true
+      this.trigger++
+    }
+  },
 
-  }
+  computed: {
+    notRemovedPhotos() {
+      this.trigger
+      return this.item.photos.filter(e => !e.hasOwnProperty('is_deleted'))
+    }
+  },
 }
 </script>
+
+<style lang='scss'>
+.photos {
+  &__item {
+    & img {
+      height: 200px;
+      width: 200px;
+    }
+  }
+}
+
+.photo-actions {
+  position: absolute;
+  background: rgba(29,32,34,.7);
+  color: white;
+  height: 36%;
+  width: 100%;
+  bottom: 0;
+  padding-top: 5px;
+  & .v-icon {
+    color: white;
+    height: 16px;
+    font-size: 18px;
+    margin-right: 4px;
+  }
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: .8;
+    cursor: pointer;
+    margin-bottom: 4px;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+</style>

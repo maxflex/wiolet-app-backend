@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Photo;
 use App\Http\Resources\Photo\PhotoResource;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class PhotosController extends Controller
 {
@@ -29,15 +30,13 @@ class PhotosController extends Controller
             'photo' => 'required|image',
         ]);
 
-        $file = $request->file('photo');
-        $extension = $file->getClientOriginalExtension();
-        $original_name = $file->getClientOriginalName();
-        $filename = uniqid() . '.' . $extension;
-        $file->storeAs('public/' . Photo::UPLOAD_PATH, $filename);
+        $item = auth()->user()->photos()->create();
 
-        $item = auth()->user()->photos()->create([
-            'filename' => $filename
-        ]);
+        $request->file('photo')->storeAs('public/' . Photo::UPLOAD_PATH, Photo::getFilename($item));
+
+        $resizedImage = Image::make($request->file('photo')->getRealPath());
+        $resizedImage->resize(200, 200);
+        $resizedImage->save(storage_path('app/public/' . Photo::UPLOAD_PATH)  . Photo::getFilename($item, true));
 
         return new PhotoResource($item);
     }

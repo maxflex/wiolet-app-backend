@@ -13,7 +13,7 @@ class UserListResource extends JsonResource
         return extractFields($this, [
             'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen'
         ], [
-            'photo_url' => count($this->photos) > 0 ? $this->photos[0]->url : null,
+            'photo_url' => count($this->photos) > 0 ? $this->photos[0]->thumb_url : null,
             'last_message' => new MessageResource(
                 Message::mutual($this->id, auth()->id())->latest()->first()
             )

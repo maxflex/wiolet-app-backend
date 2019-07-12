@@ -240,6 +240,15 @@ trait UserScopes
     }
 
     /**
+     * Не включать в выборку пользователей, которые тебя дислайкнули
+     */
+    public function scopeExcludeDisliked(Builder $query, int $userId) : Builder
+    {
+        return $query
+            ->lastActionNotEqualsReverse($userId, EventType::DISLIKE());
+    }
+
+    /**
      * Функция проверки дизлайков
      *
      * Получаем стек всех записей от user_1 к user_2

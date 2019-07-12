@@ -8,11 +8,27 @@ class Photo extends Model
 {
     const UPLOAD_PATH = 'photos/';
 
-    protected $fillable = ['filename', 'position'];
+    protected $fillable = ['position'];
 
     public function getUrlAttribute()
     {
-        return config('app.url') . 'storage/' . self::UPLOAD_PATH . $this->filename;
+        return config('app.url') . 'storage/' . self::UPLOAD_PATH . self::getFilename($this);
+    }
+
+    public function getThumbUrlAttribute()
+    {
+        return config('app.url') . 'storage/' . self::UPLOAD_PATH . self::getFilename($this, true);
+    }
+
+    public static function getFilename($item, $thumb = false)
+    {
+        // 13.jpg
+        // 13_thumb.jpg
+        return sprintf(
+            "%s%s.jpg",
+            $item->id,
+            ($thumb ? '_thumb' : '')
+        );
     }
 
     public static function boot()

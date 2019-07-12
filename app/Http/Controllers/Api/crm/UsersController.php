@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\crm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CrmController as Controller;
 use App\Models\User\User;
-use App\Http\Resources\{Crm\UserListResource, User\UserResource};
+use App\Http\Resources\{Crm\UserListResource, Crm\UserResource};
 
 class UsersController extends Controller
 {
@@ -33,6 +33,11 @@ class UsersController extends Controller
         $item = User::find($id);
         $item->update($request->all());
         $item->preferences()->update($request->preferences);
+        foreach($request->photos as $photo) {
+            if (isset($photo['is_deleted'])) {
+                $item->photos->where('id', $photo['id'])->first()->delete();
+            }
+        }
         $item->save();
         return new UserResource($item);
     }
