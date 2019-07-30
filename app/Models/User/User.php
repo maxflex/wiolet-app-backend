@@ -24,8 +24,8 @@ class User extends Authenticatable implements JWTSubject
         'name', 'email', 'password', 'birthdate', 'gender',
         'phone', 'city_id', 'about', 'height', 'weight',
         'body_type', 'hair_color', 'eye_color', 'kids',
-        'lives', 'alcohol', 'smoking', 'company', 'occupation',
-        'university', 'is_hidden', 'service_id', 'device_token',
+        'lives', 'alcohol', 'smoking', 'job', 'education',
+        'is_hidden', 'service_id', 'device_token',
         'notifications'
     ];
 

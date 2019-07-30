@@ -13,9 +13,9 @@ class ProfileResource extends JsonResource
     {
         return extractFields($this, [
             'id', 'name', 'email', 'gender', 'birthdate', 'about',
-            'height', 'weight', 'phone', 'is_online', 'university',
+            'height', 'weight', 'phone', 'is_online', 'job', 'education',
             'body_type', 'hair_color', 'eye_color', 'kids', 'is_hidden',
-            'lives', 'alcohol', 'smoking', 'company', 'occupation', 'notifications'
+            'lives', 'alcohol', 'smoking', 'notifications'
         ], [
             'city' => new CityResource($this->city),
             'photos' => PhotoResource::collection($this->photos),

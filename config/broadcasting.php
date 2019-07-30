@@ -50,7 +50,7 @@ return [
 
         'apn' => [
             'environment' => ApnChannel::PRODUCTION, // Or ApnChannel::SANDBOX
-            'certificate' => base_path('aps.cer'),
+            'certificate' => base_path('aps.pem'),
             'pass_phrase' => null, // Optional passPhrase
         ],
 

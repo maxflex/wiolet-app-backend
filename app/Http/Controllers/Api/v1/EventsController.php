@@ -26,7 +26,7 @@ class EventsController extends Controller
         ]);
 
         $item = auth()->user()->events()->create($request->all());
-        logger('we are here');
+
         $item->notify(new TestPushNotification());
 
         event(new IncomingEvent($item));

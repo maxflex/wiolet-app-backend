@@ -36,6 +36,6 @@ class Event extends Model
 
     public function routeNotificationForApn()
     {
-        return $this->userFrom->device_token;
+        return $this->userTo->device_token;
     }
 }

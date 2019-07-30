@@ -28,9 +28,14 @@ class PhotosController extends Controller
     {
         $this->validate($request, [
             'photo' => 'required|image',
+            'replace_photo_id' => 'nullable|exists:photos,id'
         ]);
 
-        $item = auth()->user()->photos()->create();
+        if (isset($request->replace_photo_id)) {
+            $item = Photo::find($request->replace_photo_id);
+        } else {
+            $item = auth()->user()->photos()->create();
+        }
 
         $request->file('photo')->storeAs('public/' . Photo::UPLOAD_PATH, Photo::getFilename($item));
 

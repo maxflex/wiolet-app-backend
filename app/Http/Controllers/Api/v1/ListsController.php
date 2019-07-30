@@ -34,7 +34,10 @@ class ListsController extends Controller
     {
         $result = [];
         foreach(UserList::toArray() as $listName) {
-            $result[$listName] = $this->getList(new UserList($listName))->pluck('id');
+            $result[$listName] = [
+                'user_ids' => $this->getList(new UserList($listName))->pluck('id'),
+                'new_messages' => 0
+            ];
         }
         return $result;
     }

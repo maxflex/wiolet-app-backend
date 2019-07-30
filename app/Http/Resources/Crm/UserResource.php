@@ -17,9 +17,9 @@ class UserResource extends JsonResource
     {
         return extractFields($this, [
             'id', 'name', 'gender', 'birthdate', 'about',
-            'height', 'weight', 'phone', 'is_online', 'university',
+            'height', 'weight', 'phone', 'is_online', 'job', 'education',
             'body_type', 'hair_color', 'eye_color', 'kids', 'is_hidden',
-            'lives', 'alcohol', 'smoking', 'company', 'occupation', 'last_seen',
+            'lives', 'alcohol', 'smoking', 'last_seen',
             'preferences', 'email'
         ], [
             'photos' => PhotoResource::collection($this->photos),

@@ -37,9 +37,6 @@ $factory->define(User::class, function (Faker $faker) {
         'lives' => collect(Lives::toArray())->random(),
         'alcohol' => collect(Alcohol::toArray())->random(),
         'smoking' => collect(Smoking::toArray())->random(),
-        'company' => $faker->company(),
-        'occupation' => $faker->jobTitle(),
-        'university' => collect([null, null, 'НИУ ВШЭ', 'МГУ', 'МГИМО', 'Архитектурный колледж'])->random(),
     ];
 });
 
