@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event\{Event, EventType};
 use App\Http\Resources\Event\EventResource;
 use App\Events\IncomingEvent;
+use App\Notifications\TestPushNotification;
 
 class EventsController extends Controller
 {
@@ -25,6 +26,8 @@ class EventsController extends Controller
         ]);
 
         $item = auth()->user()->events()->create($request->all());
+        logger('we are here');
+        $item->notify(new TestPushNotification());
 
         event(new IncomingEvent($item));
 

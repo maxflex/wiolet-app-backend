@@ -1,5 +1,7 @@
 <?php
 
+use NotificationChannels\Apn\ApnChannel;
+
 return [
 
     /*
@@ -44,6 +46,12 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'default',
+        ],
+
+        'apn' => [
+            'environment' => ApnChannel::PRODUCTION, // Or ApnChannel::SANDBOX
+            'certificate' => base_path('aps.cer'),
+            'pass_phrase' => null, // Optional passPhrase
         ],
 
         'log' => [

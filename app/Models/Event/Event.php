@@ -5,9 +5,12 @@ namespace App\Models\Event;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User\User;
 use App\Http\Resources\Event\EventResource;
+use Illuminate\Notifications\Notifiable;
 
 class Event extends Model
 {
+    use Notifiable;
+
     protected $fillable = ['user_id_to', 'type', 'comment'];
 
     public function userTo()
@@ -29,5 +32,10 @@ class Event extends Model
     public static function getLatest(int $userIdFrom, int $userIdTo)
     {
         return self::where('user_id_from', $userIdFrom)->where('user_id_to', $userIdTo)->latest()->first();
+    }
+
+    public function routeNotificationForApn()
+    {
+        return $this->userFrom->device_token;
     }
 }
