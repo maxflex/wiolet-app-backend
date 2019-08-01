@@ -14,6 +14,7 @@ class UserListResource extends JsonResource
             'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen'
         ], [
             'photo_url' => count($this->photos) > 0 ? $this->photos[0]->thumb_url : null,
+            'new_messages' => Message::new($this->id, auth()->id())->count(),
             'last_message' => new MessageResource(
                 Message::mutual($this->id, auth()->id())->latest()->first()
             )

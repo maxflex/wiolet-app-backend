@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Event\EventType;
 use App\Models\User\{User, UserList};
+use App\Models\Message;
+
 use App\Http\Resources\User\UserListResource;
 
 class ListsController extends Controller
@@ -34,9 +36,10 @@ class ListsController extends Controller
     {
         $result = [];
         foreach(UserList::toArray() as $listName) {
+            $userIds =  $this->getList(new UserList($listName))->pluck('id');
             $result[$listName] = [
-                'user_ids' => $this->getList(new UserList($listName))->pluck('id'),
-                'new_messages' => 0
+                'user_ids' => $userIds,
+                'new_messages' => Message::new($userIds, auth()->id())->count(),
             ];
         }
         return $result;

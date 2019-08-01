@@ -15,6 +15,18 @@ class Message extends Model
             ->whereRaw("((user_id_from = {$userIdFrom} and user_id_to = {$userIdTo}) or (user_id_from = {$userIdTo} and user_id_to = {$userIdFrom}))");
     }
 
+    public function scopeNew($query, $userIdFrom, $userIdTo)
+    {
+        if (is_array($userIdFrom)) {
+            $query->whereIn('user_id_from', $userIdFrom);
+        } else {
+            $query->where('user_id_from', $userIdFrom);
+        }
+        return $query
+            ->where('user_id_to', $userIdTo)
+            ->where('status', 'new');
+    }
+
     public static function boot()
     {
         parent::boot();
