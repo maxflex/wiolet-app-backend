@@ -15,7 +15,7 @@ class Message extends Model
             ->whereRaw("((user_id_from = {$userIdFrom} and user_id_to = {$userIdTo}) or (user_id_from = {$userIdTo} and user_id_to = {$userIdFrom}))");
     }
 
-    public function scopeOnlyNew($query, $userIdFrom, $userIdTo)
+    public function scopeNew($query, $userIdFrom, $userIdTo)
     {
         if (is_array($userIdFrom)) {
             $query->whereIn('user_id_from', $userIdFrom);

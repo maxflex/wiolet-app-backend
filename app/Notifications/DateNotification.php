@@ -7,8 +7,10 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
+use App\Models\Event\{Event, EventType};
+use App\Models\User\Enums\Gender;
 
-class TestPushNotification extends Notification
+class DateNotification extends Notification
 {
     public function via($notifiable)
     {
@@ -19,7 +21,10 @@ class TestPushNotification extends Notification
     {
         return ApnMessage::create()
             ->badge(1)
-            ->title('Вы кому-то понравились')
-            ->body("Откройте приложение, чтобы узнать");
+            ->title('У вас новое свидание!')
+            ->body(sprintf(
+                'Вы и %s понравились друг другу. Общайтесь и назначайте встречу',
+                $notifiable->userFrom->name
+            ));
     }
 }

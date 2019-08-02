@@ -39,7 +39,7 @@ class ListsController extends Controller
             $userIds =  $this->getList(new UserList($listName))->pluck('id');
             $result[$listName] = [
                 'user_ids' => $userIds,
-                'new_messages' => Message::onlyNew($userIds->all(), auth()->id())->count(),
+                'new_messages' => Message::new($userIds->all(), auth()->id())->count(),
             ];
         }
         return $result;
