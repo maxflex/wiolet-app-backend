@@ -9,7 +9,7 @@ use NotificationChannels\Apn\ApnChannel;
 use NotificationChannels\Apn\ApnMessage;
 use App\Models\User\Enums\Gender;
 
-class DateNotification extends Notification
+class IncomingMessageNotification extends Notification
 {
     public function via($notifiable)
     {
@@ -20,9 +20,10 @@ class DateNotification extends Notification
     {
         return ApnMessage::create()
             ->badge(0)
-            ->title('У вас новое свидание!')
+            ->title('Новое сообщение')
             ->body(sprintf(
-                'Вы и %s понравились друг другу. Общайтесь и назначайте встречу',
+                'Вам %s %s. Не забудьте ответить!',
+                $notifiable->userFrom->gender === Gender::FEMALE ? 'написала' : 'написал',
                 $notifiable->userFrom->name
             ));
     }

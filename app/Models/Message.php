@@ -4,10 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Events\MessageRead;
+use Illuminate\Notifications\Notifiable;
+use App\Models\User\User;
 
 class Message extends Model
 {
+    use Notifiable;
+
     protected $fillable = ['user_id_to', 'text', 'type', 'read_at', 'status', 'uid'];
+
+    public function userTo()
+    {
+        return $this->belongsTo(User::class, 'user_id_to');
+    }
+
+    public function userFrom()
+    {
+        return $this->belongsTo(User::class, 'user_id_from');
+    }
 
     public function scopeMutual($query, int $userIdFrom, int $userIdTo)
     {
@@ -25,6 +39,11 @@ class Message extends Model
         return $query
             ->where('user_id_to', $userIdTo)
             ->where('status', 'new');
+    }
+
+    public function routeNotificationForApn()
+    {
+        return $this->userTo->device_token;
     }
 
     public static function boot()

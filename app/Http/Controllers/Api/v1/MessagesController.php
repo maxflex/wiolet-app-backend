@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Events\IncomingMessage;
 use App\Http\Resources\Message\MessageResource;
+use App\Notifications\IncomingMessageNotification;
 use User, DB;
 
 class MessagesController extends Controller
@@ -71,6 +72,8 @@ class MessagesController extends Controller
         $item = new Message($request->all());
         $item->user_id_from = auth()->id();
         $item->save();
+
+        $item->notify(new IncomingMessageNotification);
 
         event(new IncomingMessage($item));
 

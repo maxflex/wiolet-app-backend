@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event\{Event, EventType};
 use App\Http\Resources\Event\EventResource;
 use App\Events\IncomingEvent;
-use App\Notifications\TestPushNotification;
+use App\Notifications\{DateNotification, LikeNotification};
 use User;
 
 class EventsController extends Controller
@@ -28,17 +28,17 @@ class EventsController extends Controller
 
         $item = auth()->user()->events()->create($request->all());
 
-        if ($item->type === EventType::LIKE()) {
+        if ($item->type === EventType::LIKE) {
             // Если существует взаимный лайк – уведомление о списке "свидания"
             if (Event::query()
                 ->where('user_id_from', $item->user_id_to)
                 ->where('user_id_to', auth()->id())
-                ->where('type', EventType::LIKE())
+                ->where('type', EventType::LIKE)
                 ->exists()
             ) {
-                $item->notify(new DateNotification());
+                $item->notify(new DateNotification);
             } else {
-                $item->notify(new LikeNotification());
+                $item->notify(new LikeNotification);
             }
         }
 
