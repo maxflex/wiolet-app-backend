@@ -43,11 +43,12 @@ class UserResource extends JsonResource
                 ->where('user_id_to', auth()->id())
                 ->count(),
 
-            'new_messages' => Message::query()
-                ->where('user_id_from', $this->id)
-                ->where('user_id_to', auth()->id())
-                ->where('status', 'new')
-                ->count(),
+            'new_messages' => Message::new($this->id, auth()->id())->count(),
+
+            'is_liked' => Event::query()
+                ->where('user_id_from', auth()->id())
+                ->where('user_id_to', $this->id)
+                ->exists()
         ]);
     }
 }

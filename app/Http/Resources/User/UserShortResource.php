@@ -11,7 +11,7 @@ class UserShortResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'name', 'gender', 'age'
+            'id', 'name', 'gender', 'age', 'last_seen', 'is_online', 'birthdate'
         ], [
             'photo_url' => count($this->photos) > 0 ? $this->photos[0]->url : null,
         ]);

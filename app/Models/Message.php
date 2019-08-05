@@ -11,7 +11,7 @@ class Message extends Model
 {
     use Notifiable;
 
-    protected $fillable = ['user_id_to', 'text', 'type', 'read_at', 'status', 'uid'];
+    protected $fillable = ['user_id_to', 'text', 'type', 'read_at', 'uid'];
 
     public function userTo()
     {
@@ -21,6 +21,18 @@ class Message extends Model
     public function userFrom()
     {
         return $this->belongsTo(User::class, 'user_id_from');
+    }
+
+    public function setIsReadAttribute($value)
+    {
+        if ($value) {
+            $this->attributes['read_at'] = now()->format(FORMAT_DATE_TIME);
+        }
+    }
+
+    public function getIsReadAttribute()
+    {
+        return $this->attributes['read_at'] !== null;
     }
 
     public function scopeMutual($query, int $userIdFrom, int $userIdTo)
@@ -38,7 +50,7 @@ class Message extends Model
         }
         return $query
             ->where('user_id_to', $userIdTo)
-            ->where('status', 'new');
+            ->whereNotNull('read_at');
     }
 
     public function routeNotificationForApn()
@@ -51,8 +63,7 @@ class Message extends Model
         parent::boot();
 
         static::updating(function ($model) {
-            if ($model->isDirty('status') && $model->status === 'read') {
-                $model->read_at = now()->format(FORMAT_DATE_TIME);
+            if ($model->isDirty('read_at') && $model->read_at !== null) {
                 event(new MessageRead($model));
             }
         });

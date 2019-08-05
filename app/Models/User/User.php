@@ -72,6 +72,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Event::class, 'user_id_from');
     }
 
+    public function listViews()
+    {
+        return $this->hasMany(UserListView::class);
+    }
+
     public function getIsOnlineAttribute()
     {
         return Redis::get(cacheKey('online', $this->id)) !== null;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Event\EventType;
-use App\Models\User\{User, UserList};
+use App\Models\User\{User, UserListView, UserList};
 use App\Models\Message;
 
 use App\Http\Resources\User\UserListResource;
@@ -24,7 +24,18 @@ class ListsController extends Controller
             ]
         ]);
 
-        $items = $this->getList(new UserList($request->name))->paginate(20);
+        $listName = $request->name;
+
+        $items = $this->getList(new UserList($listName))->paginate(20);
+
+        auth()->user()->listViews()->where('list', $listName)->delete();
+
+        $this->getList(new UserList($listName))->pluck('id')->each(function ($userId) use ($listName) {
+            auth()->user()->listViews()->create([
+                'viewed_user_id' => $userId,
+                'list' => $listName,
+            ]);
+        });
 
         return UserListResource::collection($items);
     }
@@ -36,10 +47,14 @@ class ListsController extends Controller
     {
         $result = [];
         foreach(UserList::toArray() as $listName) {
-            $userIds =  $this->getList(new UserList($listName))->pluck('id');
+            $userIds = $this->getList(new UserList($listName))->pluck('id')->all();
             $result[$listName] = [
                 'user_ids' => $userIds,
-                'new_messages' => Message::new($userIds->all(), auth()->id())->count(),
+                'new_users' => count(array_diff(
+                    $userIds,
+                    auth()->user()->listViews()->where('list', $listName)->pluck('viewed_user_id')->all()
+                )),
+                'new_messages' => Message::new($userIds, auth()->id())->count(),
             ];
         }
         return $result;

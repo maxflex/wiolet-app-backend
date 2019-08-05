@@ -3,13 +3,15 @@
 namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\{Photo\PhotoResource, Message\MessageResource};
+use App\Http\Resources\{Photo\PhotoResource, Message\MessageResource, Event\EventResource};
 use App\Models\Message;
 
 class UserListResource extends JsonResource
 {
     public function toArray($request)
     {
+        $latestEventFromThem = Event::getLatest($this->id, auth()->id());
+
         return extractFields($this, [
             'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen'
         ], [
@@ -17,7 +19,8 @@ class UserListResource extends JsonResource
             'new_messages' => Message::new($this->id, auth()->id())->count(),
             'last_message' => new MessageResource(
                 Message::mutual($this->id, auth()->id())->latest()->first()
-            )
+            ),
+            'event' => $latestEventFromThem === null ? null : new EventResource($latestEventFromThem)
         ]);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Models\Event;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User\User;
+use App\Models\User\{User, UserList};
 use App\Http\Resources\Event\EventResource;
 use Illuminate\Notifications\Notifiable;
 
@@ -32,6 +32,26 @@ class Event extends Model
     public static function getLatest(int $userIdFrom, int $userIdTo)
     {
         return self::where('user_id_from', $userIdFrom)->where('user_id_to', $userIdTo)->latest()->first();
+    }
+
+    /**
+     * Пытаемся найти в какой список пришло событие
+     * Нужно для того, чтобы по сокетам было понятно, куда определить event
+     * К примеру, зашли в список "Свидания", падает новый event, и нужно понять, что этот event
+     * относится именно к списку "свидания", чтобы сразу его в вверх списка добавить
+     *
+     * На самом деле, событие может упасть либо в "свидания" либо в "Хотят встретиться с вами"
+     */
+    public function associateWithList()
+    {
+        // Event закидываем только в случае лайка
+        if ($this->type) {
+            // Если лайк был от нас, то в "свидания"
+            return optional(self::getLatest($this->user_id_to, $this->user_id_from))->type === EventType::LIKE ?
+                UserList::DATES :
+                UserList::WANT_TO_MEET_YOU;
+        }
+        return null;
     }
 
     public function routeNotificationForApn()

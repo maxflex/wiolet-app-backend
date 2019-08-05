@@ -45,6 +45,7 @@ class IncomingEvent implements ShouldBroadcast
         $latestEventFromThem = Event::getLatest($this->event->user_id_from, $this->event->user_id_to);
         return [
             'user' => new UserShortResource(User::find($this->event->user_id_from)),
+            'list' => $this->event->associateWithList(),
             'events' => [
                 'me' => $latestEventFromMe === null ? null : new EventResource($latestEventFromMe),
                 'them' => $latestEventFromThem === null ? null : new EventResource($latestEventFromThem),

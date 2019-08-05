@@ -9,7 +9,7 @@ class MessageResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'text', 'user_id_from', 'user_id_to', 'status', 'read_at', 'type', 'uid', 'created_at'
+            'id', 'text', 'user_id_from', 'user_id_to', 'is_read', 'type', 'uid', 'created_at'
         ]);
     }
 }
