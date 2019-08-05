@@ -17,20 +17,26 @@ class MessagesController extends Controller
      */
     public function index(Request $request)
     {
+        $this->validate($request, [
+            'latest_message_created_at' => 'nullable|date_format:' . FORMAT_DATE_TIME
+        ]);
+
         $userId = auth()->id();
-        $ids = DB::select("
+
+        $ids = collect(DB::select("
             select max(`id`) as `id` from messages
             where (user_id_from = {$userId} or user_id_to = {$userId})
             group by if(user_id_from = {$userId}, user_id_to, user_id_from)
-        ");
+        "))->pluck('id');
 
-        $ids = array_map(function($e) {
-            return $e->id;
-        }, $ids);
+        $query = Message::whereIn('id', $ids)->orderBy('created_at', 'desc')->take(20);
 
-        $items = Message::whereIn('id', $ids)->orderBy('created_at', 'desc')->get();
+        // кастомная пагинация, потому что может прийти новое сообщение во время просмотра списка чатов
+        if (isset($request->latest_message_created_at)) {
+            $query->where('created_at', '>', $request->latest_message_created_at);
+        }
 
-        return MessageResource::collection($items);
+        return MessageResource::collection($query->get());
     }
 
     /**
