@@ -49,7 +49,7 @@ class ListsController extends Controller
         foreach(UserList::toArray() as $listName) {
             $userIds = $this->getList(new UserList($listName))->pluck('id')->all();
             $result[$listName] = [
-                'user_ids' => $userIds,
+                'all_users' => count($userIds),
                 'new_users' => count(array_diff(
                     $userIds,
                     auth()->user()->listViews()->where('list', $listName)->pluck('viewed_user_id')->all()

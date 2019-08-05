@@ -4,7 +4,7 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\{Photo\PhotoResource, Message\MessageResource, Event\EventResource};
-use App\Models\Message;
+use App\Models\{Message, Event\Event};
 
 class UserListResource extends JsonResource
 {
