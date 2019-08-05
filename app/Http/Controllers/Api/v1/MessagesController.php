@@ -18,7 +18,7 @@ class MessagesController extends Controller
     public function index(Request $request)
     {
         $this->validate($request, [
-            'latest_message_created_at' => 'nullable|date_format:' . FORMAT_DATE_TIME
+            'last_message_created_at' => 'nullable|date_format:' . FORMAT_DATE_TIME
         ]);
 
         $userId = auth()->id();
@@ -32,8 +32,8 @@ class MessagesController extends Controller
         $query = Message::whereIn('id', $ids)->orderBy('created_at', 'desc')->take(20);
 
         // кастомная пагинация, потому что может прийти новое сообщение во время просмотра списка чатов
-        if (isset($request->latest_message_created_at)) {
-            $query->where('created_at', '>', $request->latest_message_created_at);
+        if (isset($request->last_message_created_at)) {
+            $query->where('created_at', '>', $request->last_message_created_at);
         }
 
         return MessageResource::collection($query->get());
