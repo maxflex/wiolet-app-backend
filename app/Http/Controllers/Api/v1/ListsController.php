@@ -22,19 +22,19 @@ class ListsController extends Controller
             'name' => [
                 'required',
                 'in:' . implode(',', UserList::values())
-            ]
+            ],
+            'latest_created_at' => 'nullable|date_format:' . FORMAT_DATE_TIME
         ]);
 
         $listName = $request->name;
 
-        $query = $this
-            ->getList(new UserList($listName))
+        $query = User::getList(new UserList($listName), auth()->id())
             ->select(DB::raw("users.*, (select max(created_at) from events where events.user_id_from = users.id) as latest_created_at"))
             ->orderBy('latest_created_at', 'desc');
 
         // кастомная пагинация, потому что может прийти новое сообщение во время просмотра списка чатов
         if (isset($request->latest_created_at)) {
-            $query->havingRaw("latest_created_at > '{$request->latest_created_at}'");
+            $query->whereRaw("(select max(created_at) from events where events.user_id_from = users.id) > '{$request->latest_created_at}'");
         }
 
         // засчитать просмотр списка
