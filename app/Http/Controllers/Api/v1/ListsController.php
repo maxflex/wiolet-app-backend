@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Event\EventType;
 use App\Models\User\{User, UserListView, UserList};
 use App\Models\Message;
+use DB;
 
 use App\Http\Resources\User\UserListResource;
 
@@ -26,10 +27,18 @@ class ListsController extends Controller
 
         $listName = $request->name;
 
-        $items = $this->getList(new UserList($listName))->paginate(20);
+        $query = $this
+            ->getList(new UserList($listName))
+            ->select(DB::raw("users.*, (select max(created_at) from events where events.user_id_from = users.id) as latest_created_at"))
+            ->orderBy('latest_created_at', 'desc');
 
+        // кастомная пагинация, потому что может прийти новое сообщение во время просмотра списка чатов
+        if (isset($request->latest_created_at)) {
+            $query->havingRaw("latest_created_at > '{$request->latest_created_at}'");
+        }
+
+        // засчитать просмотр списка
         auth()->user()->listViews()->where('list', $listName)->delete();
-
         $this->getList(new UserList($listName))->pluck('id')->each(function ($userId) use ($listName) {
             auth()->user()->listViews()->create([
                 'viewed_user_id' => $userId,
@@ -37,7 +46,7 @@ class ListsController extends Controller
             ]);
         });
 
-        return UserListResource::collection($items);
+        return UserListResource::collection($query->paginate(20));
     }
 
     /**
@@ -58,15 +67,5 @@ class ListsController extends Controller
             ];
         }
         return $result;
-    }
-
-    /**
-     * Получить список
-     *
-     * @param UserList $list название списка
-     */
-    private function getList(UserList $list)
-    {
-        return User::{toCamelCase($list->getValue()) . 'List'}(auth()->id());
     }
 }

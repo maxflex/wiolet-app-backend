@@ -13,7 +13,7 @@ class UserListResource extends JsonResource
         $latestEventFromThem = Event::getLatest($this->id, auth()->id());
 
         return extractFields($this, [
-            'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen'
+            'id', 'name', 'gender', 'is_online', 'birthdate', 'last_seen', 'latest_created_at'
         ], [
             'photo_url' => count($this->photos) > 0 ? $this->photos[0]->thumb_url : null,
             'new_messages' => Message::new($this->id, auth()->id())->count(),

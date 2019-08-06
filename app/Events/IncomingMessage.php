@@ -51,6 +51,7 @@ class IncomingMessage implements ShouldBroadcast
     {
         // return new MessageResource($this->message);
         return [
+            'list' => $this->message->userTo->associateWithList(auth()->id()),
             'user' => new UserShortResource(User::find($this->message->user_id_from)),
             'message' => new MessageResource($this->message)
         ];

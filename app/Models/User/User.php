@@ -132,6 +132,36 @@ class User extends Authenticatable implements JWTSubject
         return $defaultPreferences;
     }
 
+    /**
+     * Пытаемся определить какому списку принадлежит пользователь
+     * Нужно для того, чтобы по сокетам было понятно, куда определить event или сообщение
+     * К примеру, зашли в список "Свидания", падает новый event, и нужно понять, что этот event
+     * относится именно к списку "свидания", чтобы сразу его в вверх списка добавить
+     *
+     *
+     * @param int $userId пользователь, относительно которого устанавливается ассоциация
+     */
+    public function associateWithList(int $userId)
+    {
+        foreach(UserList::toArray() as $listName) {
+            $userIds = self::getList(new UserList($listName), $userId)->pluck('id');
+            if ($userIds->contains($this->id)) {
+                return $listName;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Получить список
+     *
+     * @param UserList $list название списка
+     */
+    public static function getList(UserList $list, int $userId)
+    {
+        return self::{toCamelCase($list->getValue()) . 'List'}(auth()->id());
+    }
+
     public static function boot()
     {
         parent::boot();

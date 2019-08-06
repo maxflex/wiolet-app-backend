@@ -32,7 +32,7 @@ class Message extends Model
 
     public function getIsReadAttribute()
     {
-        return $this->attributes['read_at'] !== null;
+        return (bool) @$this->attributes['read_at'];
     }
 
     public function scopeMutual($query, int $userIdFrom, int $userIdTo)
@@ -50,7 +50,7 @@ class Message extends Model
         }
         return $query
             ->where('user_id_to', $userIdTo)
-            ->whereNotNull('read_at');
+            ->whereNull('read_at');
     }
 
     public function routeNotificationForApn()
