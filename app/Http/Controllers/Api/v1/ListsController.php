@@ -39,7 +39,7 @@ class ListsController extends Controller
 
         // засчитать просмотр списка
         auth()->user()->listViews()->where('list', $listName)->delete();
-        $this->getList(new UserList($listName))->pluck('id')->each(function ($userId) use ($listName) {
+        User::getList(new UserList($listName), auth()->id())->pluck('id')->each(function ($userId) use ($listName) {
             auth()->user()->listViews()->create([
                 'viewed_user_id' => $userId,
                 'list' => $listName,
@@ -56,7 +56,7 @@ class ListsController extends Controller
     {
         $result = [];
         foreach(UserList::toArray() as $listName) {
-            $userIds = $this->getList(new UserList($listName))->pluck('id')->all();
+            $userIds = User::getList(new UserList($listName), auth()->id())->pluck('id')->all();
             $result[$listName] = [
                 'all_users' => count($userIds),
                 'new_users' => count(array_diff(
