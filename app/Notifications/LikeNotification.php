@@ -5,8 +5,9 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use NotificationChannels\Apn\ApnChannel;
-use NotificationChannels\Apn\ApnMessage;
+// use NotificationChannels\Apn\ApnChannel;
+// use NotificationChannels\Apn\ApnMessage;
+use SemyonChetvertnyh\ApnNotificationChannel\ApnMessage;
 use App\Models\Event\{Event, EventType};
 use App\Models\User\Enums\Gender;
 
@@ -14,7 +15,7 @@ class LikeNotification extends Notification
 {
     public function via($notifiable)
     {
-        return [ApnChannel::class];
+        return ['apn'];
     }
 
     public function toApn($notifiable)
@@ -26,6 +27,10 @@ class LikeNotification extends Notification
                 '%s %s симпатию. Не упустите шанс завести новое  знакомство',
                 $notifiable->userFrom->name,
                 $notifiable->userFrom->gender === Gender::FEMALE ? 'проявила' : 'проявил'
-            ));
+            ))
+            ->threadId('event')
+            ->custom('acme', [
+                'event-type' => $notifiable->userFrom->associateWithList($notifiable->userTo->id),
+            ]);;
     }
 }

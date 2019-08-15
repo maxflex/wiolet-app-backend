@@ -49,9 +49,16 @@ return [
         ],
 
         'apn' => [
-            'environment' => ApnChannel::PRODUCTION, // Or ApnChannel::SANDBOX
-            'certificate' => base_path('aps.pem'),
-            'pass_phrase' => null, // Optional passPhrase
+            // 'environment' => ApnChannel::PRODUCTION, // Or ApnChannel::SANDBOX
+            // 'certificate' => base_path('aps.pem'),
+            // 'pass_phrase' => null, // Optional passPhrase
+
+            'is_production' => env('APP_ENV') === 'production',
+            'key_id' => env('APN_KEY_ID'), // The Key ID of the p8 file (available at https://developer.apple.com/account/ios/authkey/)
+            'team_id' => env('APN_TEAM_ID'), // The Team ID of your Apple Developer Account (available at https://developer.apple.com/account/#/membership/)
+            'app_bundle_id' => env('APN_APP_BUNDLE_ID'), // The Bundle ID of your application. For example, "com.company.application"
+            'private_key_path' => env('APN_PRIVATE_KEY', storage_path('AuthKey_5WRY3NT3U9.p8')),
+            'private_key_secret' => env('APN_PRIVATE_KEY_SECRET'),
         ],
 
         'log' => [
