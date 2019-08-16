@@ -11,7 +11,7 @@ class Message extends Model
 {
     use Notifiable;
 
-    protected $fillable = ['user_id_to', 'text', 'type', 'read_at', 'uid'];
+    protected $fillable = ['user_id_to', 'text', 'type', 'is_read', 'uid'];
 
     public function userTo()
     {

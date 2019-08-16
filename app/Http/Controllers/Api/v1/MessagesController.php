@@ -35,11 +35,11 @@ class MessagesController extends Controller
         $me = auth()->id();
 
         // отметить сообщения прочитанными
-        Message::query()
-            ->whereRaw("(user_id_from = {$userId} and user_id_to = {$me})")
-            ->update([
-                'read_at' => now()->format(FORMAT_DATE_TIME)
-            ]);
+        // Message::query()
+        //     ->whereRaw("(user_id_from = {$userId} and user_id_to = {$me})")
+        //     ->update([
+        //         'read_at' => now()->format(FORMAT_DATE_TIME)
+        //     ]);
 
 
         $items = Message::query()

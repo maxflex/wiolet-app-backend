@@ -54,3 +54,8 @@ function toCamelCase(string $string, string $separator = '-') : string
 {
     return lcfirst(implode('', array_map(function($e) { return ucfirst($e); }, explode($separator, $string))));
 }
+
+function wrapInQuotes(array $array) : string
+{
+    return "'" . implode ( "', '", $array ) . "'";
+}

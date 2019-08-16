@@ -10,9 +10,11 @@ use App\Http\Requests\Profile\UpdateRequest;
 
 class ProfileController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
-        return new ProfileResource(auth()->user());
+        return response(
+            new ProfileResource(auth()->user())
+        )->header('Application-Outdated', $this->checkApplicationVersion($request));
     }
 
     public function update(UpdateRequest $request)
@@ -28,5 +30,13 @@ class ProfileController extends Controller
     {
         auth()->user()->delete();
         return emptyResponse();
+    }
+
+    /**
+     * Проверка версии приложения
+     */
+    private function checkApplicationVersion(Request $request)
+    {
+        return $request->headers->get('Application-Version') === config('app.version') ? 0 : 1;
     }
 }

@@ -182,41 +182,85 @@ trait UserScopes
         return $query->lastAction($userId, $eventType, true, true);
     }
 
+    /**
+     * Действие от user_1 к user_2 было когда-либо
+     *
+     * @param mixed $events если не указан, то проверка есть ли хоть какое-нибудь событие
+     */
+    public function scopeActionExists(
+        Builder $query,
+        int $userId,
+        $events = null,
+        $reverse = false,
+        $negate = false
+    ) : Builder
+    {
+        $userIdFrom = $reverse ? 'users.id' : $userId;
+        $userIdTo   = $reverse ? $userId    : 'users.id';
+        if ($events !== null) {
+            $condition = is_array($events) ?  "events.type in (" . wrapInQuotes($events) . ")" : "events.type = '{$events}'";
+        } else {
+            $condition = 'true';
+        }
+        return $query->whereRaw(($negate ? 'not' : '') . "
+            exists (select 1 from events where events.user_id_from = {$userIdFrom} and user_id_to = {$userIdTo} and {$condition})
+        ");
+    }
+
+    public function scopeActionExistsReverse($query, $userId, $events = null)
+    {
+        return $query->actionExists($userId, $events, true);
+    }
+
+    public function scopeActionNotExists($query, $userId, $events = null)
+    {
+        return $query->actionExists($userId, $events, false, true);
+    }
+
+    public function scopeActionNotExistsReverse($query, $userId, $events = null)
+    {
+        return $query->actionExists($userId, $events, true, true);
+    }
+
 
     /**
      * Cписок «Вы хотите встретиться»
+     * UserList::YOU_WANT_TO_MEET
+     * you-want-to-meet
      *
-     * Последнее событие в таблице Event_Stream от user_1 к user_2 - код 1 (лайк) -true
-     * Block_function - false
-     * Последнее событие в таблице Event_Stream от user_2 к user_1 - любой код кроме 1 и 4 -true
+     * Последнее событие от user_1  к user_2 - лайк (1)
+     * От user_2 к user_1 - во всей таблице отсутствует событие лайк(1)
      */
     public function scopeYouWantToMeetList(Builder $query, int $userId) : Builder
     {
         return $query
-            ->notBanned($userId)
             ->lastAction($userId, EventType::LIKE())
-            ->lastActionNotEqualsReverse($userId, EventType::LIKE())
-            ->lastActionNotEqualsReverse($userId, EventType::REMOVED_FROM_YOU_WANT_TO_MEET_LIST());
+            ->actionNotExistsReverse($userId, EventType::LIKE());
     }
 
     /**
      * Спискок «С вами хотят встретиться»
+     * UserList::WANT_TO_MEET_YOU
+     * want-to-meet-you
      *
-     * Последнее событие в таблице Event_Stream от user_2 к user_1 - код 1 (лайк) - true
-     * Последнее событие в таблице Event_Stream от user_1 к user_2 - любой код кроме 1 и 5 - true
-     * Block_function - false
+     * Во всей таблице есть событие от user_2  к user_1 - лайк (1)
+     * Последнее событие от user_1  к user_2 - код 2,  либо отсутствие событий.
      */
     public function scopeWantToMeetYouList(Builder $query, int $userId) : Builder
     {
         return $query
-            ->notBanned($userId)
-            ->lastActionReverse($userId, EventType::LIKE())
-            ->lastActionNotEquals($userId, EventType::LIKE())
-            ->lastActionNotEquals($userId, EventType::REMOVED_FROM_WANT_TO_MEET_YOU_LIST());
+            ->actionExistsReverse($userId, EventType::LIKE)
+            ->where(function ($query) use ($userId) {
+                return $query->lastAction($userId, EventType::LIKE())->orWhere(function ($query) use ($userId) {
+                    return $query->actionNotExists($userId);
+                });
+            });
     }
 
     /**
      * Список «Свидания»
+     * UserList::DATES
+     * dates
      *
      * Последнее событие в таблице Event_Stream от user_1 к user_2 - код 1 (лайк) -true
      * Последнее событие в таблице Event_Stream от user_2 к user_1 - код 1 (лайк) -true

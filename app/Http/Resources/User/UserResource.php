@@ -8,7 +8,7 @@ use App\Http\Resources\{
     Event\EventResource,
     Photo\PhotoResource
 };
-use App\Models\{Event\Event, Message, User\User};
+use App\Models\{Event\Event, Event\EventType, Message, User\User};
 
 class UserResource extends JsonResource
 {
@@ -48,6 +48,14 @@ class UserResource extends JsonResource
             'is_liked' => Event::query()
                 ->where('user_id_from', auth()->id())
                 ->where('user_id_to', $this->id)
+                ->whereRaw(sprintf("NOT EXISTS (select 1 from events where user_id_from = %s and user_id_to = %s and type in (%s))",
+                    $this->id,
+                    auth()->id(),
+                    wrapInQuotes([
+                        EventType::BAN,
+                        EventType::DISLIKE
+                    ])
+                ))
                 ->exists()
         ]);
     }

@@ -10,6 +10,7 @@ class UserListResource extends JsonResource
 {
     public function toArray($request)
     {
+        $latestEventFromMe = Event::getLatest(auth()->id(), $this->id);
         $latestEventFromThem = Event::getLatest($this->id, auth()->id());
 
         return extractFields($this, [
@@ -20,7 +21,10 @@ class UserListResource extends JsonResource
             'last_message' => new MessageResource(
                 Message::mutual($this->id, auth()->id())->latest()->first()
             ),
-            'event' => $latestEventFromThem === null ? null : new EventResource($latestEventFromThem)
+            'events' => [
+                'me' => $latestEventFromMe === null ? null : new EventResource($latestEventFromMe),
+                'them' => $latestEventFromThem === null ? null : new EventResource($latestEventFromThem),
+            ]
         ]);
     }
 }

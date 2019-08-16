@@ -69,6 +69,8 @@ return [
 
     'timezone' => 'Europe/Moscow',
 
+    'version' => env('APP_VERSION'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
