@@ -179,7 +179,9 @@ return [
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+
+        SemyonChetvertnyh\ApnNotificationChannel\ApnServiceProvider::class,
     ],
 
     /*
