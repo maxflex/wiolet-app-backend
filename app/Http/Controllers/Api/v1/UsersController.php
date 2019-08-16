@@ -9,6 +9,17 @@ use App\Http\Resources\User\UserResource;
 
 class UsersController extends Controller
 {
+    public function index(Request $request)
+    {
+        $this->validate($request, [
+            'ids' => ['required']
+        ]);
+
+        return UserResource::collection(
+            User::whereIn('id', explode(',', $request->ids))->get()
+        );
+    }
+
     public function show($id)
     {
         $item = User::find($id);

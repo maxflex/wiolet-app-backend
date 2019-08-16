@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Profile\ProfileResource;
 use App\Models\User\User;
 use App\Http\Requests\Profile\UpdateRequest;
+use App\Events\ProfileDeleted;
 
 class ProfileController extends Controller
 {
@@ -28,7 +29,9 @@ class ProfileController extends Controller
 
     public function delete()
     {
-        auth()->user()->delete();
+        auth()->user()->deleted_at = now()->format(FORMAT_DATE_TIME);
+        auth()->user()->save();
+        event(new ProfileDeleted(auth()->user()));
         return emptyResponse();
     }
 

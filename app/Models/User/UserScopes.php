@@ -251,7 +251,7 @@ trait UserScopes
         return $query
             ->actionExistsReverse($userId, EventType::LIKE)
             ->where(function ($query) use ($userId) {
-                return $query->lastAction($userId, EventType::LIKE())->orWhere(function ($query) use ($userId) {
+                return $query->lastAction($userId, EventType::DISLIKE())->orWhere(function ($query) use ($userId) {
                     return $query->actionNotExists($userId);
                 });
             });

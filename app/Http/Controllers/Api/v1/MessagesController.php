@@ -63,6 +63,10 @@ class MessagesController extends Controller
             'user_id_to' => ['required', 'exists:users,id']
         ]);
 
+        if (User::find($request->user_id_to)->is_deleted) {
+            return response(null, 410);
+        }
+
         $item = new Message($request->all());
         $item->user_id_from = auth()->id();
         $item->save();

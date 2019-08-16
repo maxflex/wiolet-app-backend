@@ -14,6 +14,10 @@ class UserResource extends JsonResource
 {
     public function toArray($request)
     {
+        // @todo: создать ресурс удаленного пользователя
+        if ($this->is_deleted) {
+            return extractFields($this, ['id', 'is_deleted', 'gender', 'name', 'birthdate']);
+        }
 
         $latestEventFromMe = Event::getLatest(auth()->id(), $this->id);
         $latestEventFromThem = Event::getLatest($this->id, auth()->id());

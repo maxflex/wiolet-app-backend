@@ -82,6 +82,11 @@ class User extends Authenticatable implements JWTSubject
         return Redis::get(cacheKey('online', $this->id)) !== null;
     }
 
+    public function getIsDeletedAttribute()
+    {
+        return $this->deleted_at !== null;
+    }
+
     public function setPasswordAttribute($password)
     {
         if (! empty($password)) {
